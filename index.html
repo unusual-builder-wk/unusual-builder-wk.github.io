@@ -1,0 +1,329 @@
+<title>Unusual Builder</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: one long page, left-aligned text, big gear mark in the hero, three-up strengths, story as two-column prose */
+:root{
+  --bg:#edf3f3; --surface:#ffffff; --fg:#0f2628; --muted:#4a6466; --line:#cddcdc;
+  --accent:#0b6b6b; --accent2:#18a89a; --on-accent:#ffffff; --tint:#dcebea;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0a1617; --surface:#112123; --fg:#e3eeee; --muted:#93aeb0; --line:#1e3739;
+  --accent:#2fd1c0; --accent2:#2fd1c0; --on-accent:#05302c; --tint:#12302f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a1617; --surface:#112123; --fg:#e3eeee; --muted:#93aeb0; --line:#1e3739;
+  --accent:#2fd1c0; --accent2:#2fd1c0; --on-accent:#05302c; --tint:#12302f; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font:400 17px/1.6 var(--body);margin:0;padding-inline:20px}
+.wrap{max-width:1040px;margin-inline:auto}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--display);line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:clamp(1.7rem,4vw,2.4rem);font-weight:800}
+h3{font-size:1.2rem;font-weight:700}
+p{margin:0}
+.eyebrow{font:600 .78rem/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-20px;padding:10px 20px}
+.bar{display:flex;align-items:center;gap:14px;max-width:1040px;margin-inline:auto;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg);font:800 1.15rem/1 var(--display);font-style:italic}
+.brand b{color:var(--accent);font-weight:800}
+nav{display:flex;gap:18px;margin-left:auto;align-items:center;flex-wrap:wrap}
+nav a.l{color:var(--muted);text-decoration:none;font-weight:500;font-size:.95rem}
+nav a.l:hover{color:var(--fg)}
+.lang{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.lang button{all:unset;cursor:pointer;padding:6px 10px;font:600 .8rem/1 var(--body);color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.lang button:focus-visible,a:focus-visible,.btn:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+
+.hero{position:relative;display:grid;grid-template-columns:1.25fr .75fr;gap:32px;align-items:center;padding-block:clamp(40px,8vw,88px);overflow:hidden}
+.hero h1{font-size:clamp(2.3rem,6.4vw,4.2rem);font-weight:800;margin:14px 0 18px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:34em}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{display:inline-block;padding:13px 22px;border-radius:10px;font:700 1rem/1 var(--body);text-decoration:none;border:2px solid var(--accent);cursor:pointer}
+.btn.pri{background:var(--accent);color:var(--on-accent)}
+.btn.sec{background:transparent;color:var(--accent)}
+.mark{justify-self:center;width:min(100%,300px);aspect-ratio:1;position:relative}
+.mark svg{width:100%;height:100%;display:block;filter:drop-shadow(0 18px 30px rgba(7,60,60,.28))}
+.gears{position:absolute;right:-60px;bottom:-80px;width:340px;opacity:.07;color:var(--accent);pointer-events:none}
+.gears svg{width:100%;height:auto;display:block}
+.note{margin-top:14px;font-size:.88rem;color:var(--muted)}
+
+section{padding-block:clamp(36px,6vw,64px);border-top:1px solid var(--line)}
+section>.eyebrow{display:block;margin-bottom:12px}
+.strengths{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;min-width:0}
+.card h3{margin-bottom:8px}
+.card p{color:var(--muted);font-size:.98rem}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 36px;margin-top:22px}
+.feat div{padding-block:16px;border-bottom:1px solid var(--line);min-width:0}
+.feat h3{font-size:1.05rem;margin-bottom:4px}
+.feat p{color:var(--muted);font-size:.97rem}
+.prose{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:36px;margin-top:6px}
+.prose .txt{display:flex;flex-direction:column;gap:14px;max-width:38em}
+.prose h2{margin-bottom:6px}
+.sub{margin-top:44px}
+.values{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px}
+.values li{background:var(--tint);border-radius:12px;padding:16px 20px;font:700 1.08rem/1.35 var(--display);font-style:italic}
+.credit{margin-top:22px;font:600 1.05rem/1.4 var(--display);color:var(--fg)}
+.disc{background:var(--surface);border:1px dashed var(--accent);border-radius:12px;padding:16px 20px;color:var(--muted);font-size:.95rem;margin-top:22px}
+.mail{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.mail code{font:600 1.05rem/1 var(--body);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px;user-select:all;overflow-wrap:anywhere}
+footer .n{max-width:46em;line-height:1.5}
+footer{border-top:1px solid var(--line);padding-block:28px 36px;color:var(--muted);font-size:.9rem;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr}
+  .mark{width:150px;justify-self:start;order:-1}
+  .strengths,.prose{grid-template-columns:1fr}
+  nav{margin-left:0;width:100%;justify-content:space-between}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+<header><div class="bar">
+  <a class="brand" href="#top" aria-label="Unusual Builder"><svg viewBox="0 0 100 100" width="32" height="32" style="flex:none;display:block" role="img" aria-label="Unusual Builder"><rect width="100" height="100" rx="24" fill="#0b6b6b"/><path d="M27 20V54C27 70 37 79 50 79S73 70 73 54V20" fill="none" stroke="#d5d8d8" stroke-width="9" stroke-linecap="round"/><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="#d5d8d8" fill-rule="evenodd"/></svg><span>Unusual <b>Builder</b></span></a>
+  <nav>
+    <a class="l" href="#why" data-i18n="nav_why"></a>
+    <a class="l" href="#features" data-i18n="nav_feat"></a>
+    <a class="l" href="#contact" data-i18n="nav_contact"></a>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en" aria-pressed="true">EN</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button>
+    </div>
+  </nav>
+</div></header>
+
+<main id="top">
+<div class="hero">
+  <div class="gears" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg></div>
+  <div style="position:relative">
+    <span class="eyebrow" data-i18n="tag"></span>
+    <h1 data-i18n-html="h1"></h1>
+    <p class="lead" data-i18n="lead"></p>
+    <div class="cta">
+      <a class="btn pri" href="app/" target="_blank" rel="noopener" data-i18n="open"></a>
+      <a class="btn sec" href="#why" data-i18n="story_btn"></a>
+    </div>
+    <p class="note" data-i18n="free_note"></p>
+  </div>
+  <div class="mark"><svg viewBox="0 0 100 100" width="300" height="300" style="flex:none;display:block" role="img" aria-label="Unusual Builder"><rect width="100" height="100" rx="24" fill="#0b6b6b"/><path d="M27 20V54C27 70 37 79 50 79S73 70 73 54V20" fill="none" stroke="#d5d8d8" stroke-width="9" stroke-linecap="round"/><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="#d5d8d8" fill-rule="evenodd"/></svg></div>
+</div>
+
+<section id="strengths" style="border-top:0;padding-top:0">
+  <div class="strengths">
+    <div class="card"><h3 data-i18n="s1h"></h3><p data-i18n="s1p"></p></div>
+    <div class="card"><h3 data-i18n="s2h"></h3><p data-i18n="s2p"></p></div>
+    <div class="card"><h3 data-i18n="s3h"></h3><p data-i18n="s3p"></p></div>
+  </div>
+</section>
+
+<section id="features">
+  <span class="eyebrow" data-i18n="feat_eye"></span>
+  <h2 data-i18n="feat_h"></h2>
+  <div class="feat">
+    <div><h3 data-i18n="f1h"></h3><p data-i18n="f1p"></p></div>
+    <div><h3 data-i18n="f2h"></h3><p data-i18n="f2p"></p></div>
+    <div><h3 data-i18n="f3h"></h3><p data-i18n="f3p"></p></div>
+    <div><h3 data-i18n="f4h"></h3><p data-i18n="f4p"></p></div>
+    <div><h3 data-i18n="f5h"></h3><p data-i18n="f5p"></p></div>
+    <div><h3 data-i18n="f6h"></h3><p data-i18n="f6p"></p></div>
+  </div>
+</section>
+
+<section id="why">
+  <span class="eyebrow" data-i18n="story_eye"></span>
+  <div class="prose">
+    <h2 data-i18n="story_h"></h2>
+    <div class="txt">
+      <p data-i18n="g1"></p><p data-i18n="g2"></p><p data-i18n="g3"></p><p data-i18n="g4"></p><h3 style="margin-top:10px" data-i18n="em_h"></h3><p data-i18n="e1"></p><p data-i18n="e2"></p>
+    </div>
+  </div>
+  <div class="prose sub">
+    <h2 data-i18n="why_h"></h2>
+    <div class="txt">
+      <p data-i18n-html="w1"></p><p data-i18n="w2"></p><p data-i18n="w3"></p>
+    </div>
+  </div>
+  <ul class="values">
+    <li data-i18n="v1"></li><li data-i18n="v2"></li><li data-i18n="v3"></li><li data-i18n="v4"></li>
+  </ul>
+  <p class="credit" data-i18n-html="credit"></p>
+  <p class="disc" data-i18n="disc"></p>
+</section>
+
+<section id="contact">
+  <span class="eyebrow" data-i18n="contact_eye"></span>
+  <h2 data-i18n="contact_h"></h2>
+  <p style="margin-top:10px;color:var(--muted);max-width:36em" data-i18n="contact_p"></p>
+  <div class="mail">
+    <code id="mailtxt">unusualbuilder@outlook.it</code>
+    <button class="btn sec" id="copy" type="button" data-i18n="copy"></button>
+  </div>
+</section>
+
+<section id="privacy">
+  <span class="eyebrow" data-i18n="priv_eye"></span>
+  <h2 data-i18n="priv_h"></h2>
+  <p style="margin-top:10px;color:var(--muted);max-width:40em" data-i18n="priv_p"></p>
+</section>
+</main>
+
+<footer>
+  <span>Unusual Builder · <span data-i18n="foot1"></span></span>
+  <span class="n" data-i18n="foot2"></span>
+</footer>
+</div>
+
+<script>
+var T={
+en:{
+nav_why:"Our story",nav_feat:"Features",nav_contact:"Contact",
+tag:"A Wakfu build planner, made by players",
+h1:"Plan your Wakfu build the way the <em>game counts it.</em>",
+lead:"Unusual Builder is a free, unofficial build planner for Wakfu. Pick a class, equip items, runes and sublimations, choose your spells and passives, and watch your stats update as you go.",
+open:"Open the builder",story_btn:"Our story",free_note:"Free to use. No account needed. Works on your phone.",
+s1h:"True to the game",s1p:"Items, rarities, levels and stats follow the game data, and item requirements are checked by experienced players.",
+s2h:"Made for the phone",s2p:"Designed to be used comfortably on a smartphone. Save builds and share them with a link or a code.",
+s3h:"Built with the community",s3p:"Community presets, a bug report inside the app, and updates driven by what players tell us.",
+feat_eye:"What it does",feat_h:"Everything you need for a build, in one place.",
+f1h:"All 18 classes",f1p:"Spells and passives for every class, with the unlock levels you know from the game.",
+f2h:"Full item database",f2p:"Search by name, level, rarity and slot, in English, French, Spanish and Portuguese.",
+f3h:"Live stats",f3p:"Totals update as you equip. Mastery and resistance count in the elements you choose.",
+f4h:"Item requirements",f4p:"A warning appears when an item needs something your build does not meet, such as an AP or MP limit.",
+f5h:"Save, share, browse",f5p:"Keep builds on your device, share them by link or code, and browse community presets.",
+f6h:"Report a bug",f6p:"Spotted a wrong stat or a missing item? Send a report from inside the app.",
+story_eye:"Our story",story_h:"The Unusual Italians",
+g1:"The Unusual Italians were born in 2011, during the Wakfu beta, with the opening of the international server Remington. Many of us had already played in the earlier beta phases, and although the active player base has changed a lot since then, the hard core of the Unusuals still logs in today, undaunted.",
+g2:"For a long time we were the only reference guild for the Italian community. Our only ambition was to offer a close-knit group with which to discover this game together.",
+g3:"With the release of the Gold version and the rise of new Italian guilds, we could (and indeed had to) make some changes. We chose to become one large guild focused on a single Wakfu nation, slightly narrowing our entry criteria but without betraying our original ideas.",
+g4:"Today we play on the server Rubilax. We are one of the most active Italian guilds in the game: a smaller roster than the big international guilds, but a close and passionate group that often finds itself among the top guilds in the in-game ranking.",
+em_h:"Our emblem",e1:"The first leader of the Unusual Italians created the guild with a light background and green gears. That style has been kept ever since, and respected by every leader who came after. When Neosboom and his co-leader Palumma took over, they looked after that legacy even more carefully.",e2:"We care about having a history, and above all about building an Italian community. The game is played in English, and new players can feel lost in the first days. With us they find help, a Discord channel and real people who know the game well and how it has changed over time. The two gears in our logo come from that emblem, and we kept them for Unusual Builder.",credit:"Created by <strong>Neosboom</strong>, guild leader of the Unusual Italians, who built Unusual Builder in his free time, for free, for the love of the game.",
+why_h:"Why Unusual Builder?",
+w1:"The name comes from our guild, the <strong>Unusual Italians</strong>, who have been playing Wakfu together since 2011.",
+w2:"In recent years the game has given us plenty of reasons to come back. The updates have been a joy for us, and a new Italian community has formed around Wakfu, with veterans returning and new high-level players joining. Together we rediscovered the fun of theorycrafting, sharing builds and working out how to squeeze every last point out of a set.",
+w3:"With so many items, classes, passives and mechanics in the game by 2026, we felt it was the right time to make something of our own. Unusual Builder was created by experienced players, for players. It is a passion project, made with a smile, and it does not take itself too seriously.",
+v1:"Unusual Builder was made to unite, not to divide.",v2:"It exists to make Wakfu more enjoyable and to help players build the character they dream of.",v3:"It is free, non-profit, and made out of love for the game.",v4:"Built by the community, for the community. See you in the Twelve Worlds!",
+disc:"Wakfu is an MMORPG published by Ankama. Unusual Builder is an unofficial fan project with no link to Ankama. Game images are the property of Ankama Games and/or their respective authors and may not be used for commercial purposes.",
+contact_eye:"Contact",contact_h:"Questions, bugs, ideas",contact_p:"Write to us. You can also use the Report a bug button inside the app.",copy:"Copy address",
+priv_eye:"Privacy",priv_h:"Your data stays with you",
+priv_p:"Unusual Builder does not ask you to create an account. Your builds, presets and settings are stored in your own browser or phone. If you send a bug report, we receive the report you write, and we use your email address only to reply.",
+foot1:"Free fan project",foot2:"Wakfu is an MMORPG published by Ankama. Unusual Builder is an unofficial fan project with no link to Ankama. Game images are the property of Ankama Games and/or their respective authors and may not be used for commercial purposes."},
+fr:{
+nav_why:"Notre histoire",nav_feat:"Fonctions",nav_contact:"Contact",
+tag:"Un planificateur de build Wakfu, fait par des joueurs",
+h1:"Planifiez votre build Wakfu <em>comme le jeu le calcule.</em>",
+lead:"Unusual Builder est un planificateur de build gratuit et non officiel pour Wakfu. Choisissez une classe, équipez objets, runes et sublimations, sélectionnez sorts et passifs, et regardez vos stats se mettre à jour en direct.",
+open:"Ouvrir le builder",story_btn:"Notre histoire",free_note:"Gratuit. Sans compte. Fonctionne sur téléphone.",
+s1h:"Fidèle au jeu",s1p:"Objets, raretés, niveaux et stats suivent les données du jeu, et les conditions des objets sont vérifiées par des joueurs expérimentés.",
+s2h:"Pensé pour le téléphone",s2p:"Conçu pour être utilisé confortablement sur smartphone. Sauvegardez vos builds et partagez-les par lien ou par code.",
+s3h:"Construit avec la communauté",s3p:"Presets de la communauté, signalement de bug dans l'app et mises à jour guidées par les retours des joueurs.",
+feat_eye:"Ce que ça fait",feat_h:"Tout ce qu'il faut pour un build, au même endroit.",
+f1h:"Les 18 classes",f1p:"Sorts et passifs de chaque classe, avec les niveaux de déblocage du jeu.",
+f2h:"Base d'objets complète",f2p:"Recherche par nom, niveau, rareté et emplacement, en anglais, français, espagnol et portugais.",
+f3h:"Stats en direct",f3p:"Les totaux se mettent à jour à chaque équipement. Maîtrise et résistance comptent dans les éléments que vous choisissez.",
+f4h:"Conditions des objets",f4p:"Un avertissement s'affiche quand un objet exige quelque chose que votre build ne remplit pas, comme une limite de PA ou de PM.",
+f5h:"Sauvegarder, partager, explorer",f5p:"Gardez vos builds sur votre appareil, partagez-les par lien ou code et parcourez les presets de la communauté.",
+f6h:"Signaler un bug",f6p:"Une stat erronée ou un objet manquant ? Envoyez un signalement depuis l'app.",
+story_eye:"Notre histoire",story_h:"Les Unusual Italians",
+g1:"Les Unusual Italians sont nés en 2011, pendant la bêta de Wakfu, avec l'ouverture du serveur international Remington. Beaucoup d'entre nous avaient déjà joué lors des phases précédentes de la bêta et, même si la base de joueurs actifs a beaucoup changé depuis, le noyau dur des Unusual se connecte toujours, imperturbable.",
+g2:"Pendant longtemps, nous avons été la seule guilde de référence de la communauté italienne. Notre seule prétention était d'offrir un groupe soudé avec lequel découvrir ce jeu ensemble.",
+g3:"Avec la sortie de la version Gold et l'arrivée de nouvelles guildes italiennes, nous avons pu (et même dû) changer certaines choses. Nous avons choisi de devenir une grande guilde centrée sur une seule nation de Wakfu, en restreignant un peu nos critères d'entrée sans trahir nos idées d'origine.",
+g4:"Aujourd'hui, nous jouons sur le serveur Rubilax. Nous sommes l'une des guildes italiennes les plus actives du jeu : un effectif plus petit que celui des grandes guildes internationales, mais un groupe soudé et passionné, souvent parmi les meilleures guildes du classement en jeu.",
+em_h:"Notre emblème",e1:"Le premier chef des Unusual Italians a créé la guilde avec un fond clair et des engrenages verts. Ce style a été conservé depuis, et respecté par tous les chefs qui ont suivi. Quand Neosboom et son co-chef Palumma ont pris la relève, ils ont pris soin de cet héritage avec encore plus d'attention.",e2:"Nous tenons à avoir une histoire, et surtout à construire une communauté italienne. Le jeu est en anglais, et les nouveaux joueurs peuvent se sentir perdus les premiers jours. Chez nous, ils trouvent de l'aide, un canal Discord et de vraies personnes qui connaissent bien le jeu et son évolution. Les deux engrenages de notre logo viennent de cet emblème, et nous les avons gardés pour Unusual Builder.",credit:"Créé par <strong>Neosboom</strong>, chef de la guilde Unusual Italians, qui a construit Unusual Builder pendant son temps libre, gratuitement, par amour du jeu.",
+why_h:"Pourquoi Unusual Builder ?",
+w1:"Le nom vient de notre guilde, les <strong>Unusual Italians</strong>, qui jouent ensemble à Wakfu depuis 2011.",
+w2:"Ces dernières années, le jeu nous a donné de nombreuses raisons de revenir. Les mises à jour nous ont ravis, et une nouvelle communauté italienne s'est formée autour de Wakfu, avec des vétérans de retour et de nouveaux joueurs de haut niveau. Ensemble, nous avons retrouvé le plaisir du theorycraft, du partage de builds et de la recherche du moindre point à gagner sur un set.",
+w3:"Avec tous les objets, classes, passifs et mécaniques du jeu en 2026, nous avons senti que c'était le bon moment de créer quelque chose à nous. Unusual Builder a été créé par des joueurs expérimentés, pour des joueurs. C'est un projet de passion, fait avec le sourire, qui ne se prend pas trop au sérieux.",
+v1:"Unusual Builder a été fait pour unir, pas pour diviser.",v2:"Il existe pour rendre Wakfu plus agréable et aider les joueurs à construire le personnage dont ils rêvent.",v3:"Il est gratuit, sans but lucratif, et fait par amour du jeu.",v4:"Construit par la communauté, pour la communauté. À bientôt dans le Monde des Douze !",
+disc:"WAKFU est un MMORPG édité par Ankama. Unusual Builder est un projet de fans non officiel, sans aucun lien avec Ankama. Les images du jeu sont la propriété d'Ankama Games et/ou de leurs auteurs respectifs et ne peuvent pas être utilisées à des fins commerciales.",
+contact_eye:"Contact",contact_h:"Questions, bugs, idées",contact_p:"Écrivez-nous. Vous pouvez aussi utiliser le bouton Signaler un bug dans l'app.",copy:"Copier l'adresse",
+priv_eye:"Confidentialité",priv_h:"Vos données restent chez vous",
+priv_p:"Unusual Builder ne demande pas de créer un compte. Vos builds, presets et réglages sont stockés dans votre navigateur ou votre téléphone. Si vous envoyez un signalement de bug, nous recevons le message que vous écrivez, et nous utilisons votre adresse e-mail uniquement pour répondre.",
+foot1:"Projet de fans gratuit",foot2:"WAKFU est un MMORPG édité par Ankama. Unusual Builder est un projet de fans non officiel, sans aucun lien avec Ankama. Les images du jeu sont la propriété d'Ankama Games et/ou de leurs auteurs respectifs et ne peuvent pas être utilisées à des fins commerciales."},
+es:{
+nav_why:"Nuestra historia",nav_feat:"Funciones",nav_contact:"Contacto",
+tag:"Un planificador de builds de Wakfu, hecho por jugadores",
+h1:"Planifica tu build de Wakfu <em>como lo cuenta el juego.</em>",
+lead:"Unusual Builder es un planificador de builds gratuito y no oficial para Wakfu. Elige una clase, equipa objetos, runas y sublimaciones, escoge hechizos y pasivas, y mira cómo se actualizan tus estadísticas al instante.",
+open:"Abrir el builder",story_btn:"Nuestra historia",free_note:"Gratis. Sin cuenta. Funciona en el móvil.",
+s1h:"Fiel al juego",s1p:"Objetos, rarezas, niveles y estadísticas siguen los datos del juego, y los requisitos de los objetos los revisan jugadores con experiencia.",
+s2h:"Pensado para el móvil",s2p:"Diseñado para usarse con comodidad en el smartphone. Guarda tus builds y compártelas con un enlace o un código.",
+s3h:"Hecho con la comunidad",s3p:"Presets de la comunidad, reporte de errores dentro de la app y actualizaciones guiadas por lo que cuentan los jugadores.",
+feat_eye:"Qué hace",feat_h:"Todo lo que necesitas para una build, en un solo sitio.",
+f1h:"Las 18 clases",f1p:"Hechizos y pasivas de cada clase, con los niveles de desbloqueo del juego.",
+f2h:"Base de objetos completa",f2p:"Busca por nombre, nivel, rareza y ranura, en inglés, francés, español y portugués.",
+f3h:"Estadísticas en vivo",f3p:"Los totales se actualizan al equipar. Maestría y resistencia cuentan en los elementos que elijas.",
+f4h:"Requisitos de objetos",f4p:"Aparece un aviso cuando un objeto pide algo que tu build no cumple, como un límite de PA o de PM.",
+f5h:"Guardar, compartir, explorar",f5p:"Guarda tus builds en tu dispositivo, compártelas por enlace o código y explora los presets de la comunidad.",
+f6h:"Reportar un error",f6p:"¿Una estadística incorrecta o un objeto que falta? Envía un reporte desde la app.",
+story_eye:"Nuestra historia",story_h:"Los Unusual Italians",
+g1:"Los Unusual Italians nacieron en 2011, durante la beta de Wakfu, con la apertura del servidor internacional Remington. Muchos ya habíamos jugado en las fases anteriores de la beta y, aunque la base de jugadores activos ha cambiado mucho desde entonces, el núcleo duro de los Unusual sigue conectándose, impertérrito.",
+g2:"Durante mucho tiempo fuimos el único gremio de referencia de la comunidad italiana. Nuestra única pretensión era ofrecer un grupo unido con el que descubrir este juego juntos.",
+g3:"Con la llegada de la versión Gold y el nacimiento de nuevos gremios italianos, pudimos (y de hecho tuvimos que) hacer algunos cambios. Elegimos convertirnos en un gran gremio centrado en una sola nación de Wakfu, endureciendo un poco los criterios de entrada sin traicionar nuestras ideas originales.",
+g4:"Hoy jugamos en el servidor Rubilax. Somos uno de los gremios italianos más activos del juego: una plantilla menor que la de los grandes gremios internacionales, pero un grupo unido y apasionado que a menudo aparece entre los mejores gremios de la clasificación del juego.",
+em_h:"Nuestro emblema",e1:"El primer líder de los Unusual Italians creó el gremio con un fondo claro y engranajes verdes. Ese estilo se ha mantenido desde entonces y lo han respetado todos los líderes que vinieron después. Cuando Neosboom y su colíder Palumma tomaron el relevo, cuidaron ese legado con todavía más atención.",e2:"Nos importa tener una historia y, sobre todo, construir una comunidad italiana. El juego está en inglés y los jugadores nuevos pueden sentirse perdidos los primeros días. Con nosotros encuentran ayuda, un canal de Discord y personas reales que conocen bien el juego y cómo ha cambiado con el tiempo. Los dos engranajes de nuestro logo vienen de ese emblema, y los hemos conservado para Unusual Builder.",credit:"Creado por <strong>Neosboom</strong>, líder del gremio Unusual Italians, que construyó Unusual Builder en su tiempo libre, gratis y por amor al juego.",
+why_h:"¿Por qué Unusual Builder?",
+w1:"El nombre viene de nuestro gremio, los <strong>Unusual Italians</strong>, que juegan juntos a Wakfu desde 2011.",
+w2:"En los últimos años el juego nos ha dado muchos motivos para volver. Las actualizaciones nos han encantado, y se ha formado una nueva comunidad italiana en torno a Wakfu, con veteranos que regresan y nuevos jugadores de alto nivel. Juntos hemos recuperado el placer del theorycraft, de compartir builds y de exprimir hasta el último punto de un set.",
+w3:"Con tantos objetos, clases, pasivas y mecánicas en el juego en 2026, sentimos que era el momento de crear algo propio. Unusual Builder lo han creado jugadores con experiencia, para jugadores. Es un proyecto de pasión, hecho con una sonrisa, que no se toma demasiado en serio.",
+v1:"Unusual Builder se hizo para unir, no para dividir.",v2:"Existe para hacer Wakfu más divertido y ayudar a los jugadores a construir el personaje con el que sueñan.",v3:"Es gratuito, sin ánimo de lucro, y hecho por amor al juego.",v4:"Hecho por la comunidad, para la comunidad. ¡Nos vemos en el Mundo de los Doce!",
+disc:"Wakfu es un MMORPG editado por Ankama. Unusual Builder es un proyecto de fans no oficial, sin ningún vínculo con Ankama. Las imágenes del juego son propiedad de Ankama Games y/o de sus respectivos autores y no pueden usarse con fines comerciales.",
+contact_eye:"Contacto",contact_h:"Preguntas, errores, ideas",contact_p:"Escríbenos. También puedes usar el botón Reportar un error dentro de la app.",copy:"Copiar dirección",
+priv_eye:"Privacidad",priv_h:"Tus datos se quedan contigo",
+priv_p:"Unusual Builder no te pide crear una cuenta. Tus builds, presets y ajustes se guardan en tu navegador o en tu móvil. Si envías un reporte de error, recibimos el texto que escribas, y usamos tu correo solo para responderte.",
+foot1:"Proyecto de fans gratuito",foot2:"Wakfu es un MMORPG editado por Ankama. Unusual Builder es un proyecto de fans no oficial, sin ningún vínculo con Ankama. Las imágenes del juego son propiedad de Ankama Games y/o de sus respectivos autores y no pueden usarse con fines comerciales."},
+pt:{
+nav_why:"Nossa história",nav_feat:"Funções",nav_contact:"Contato",
+tag:"Um planejador de builds de Wakfu, feito por jogadores",
+h1:"Planeje sua build de Wakfu <em>como o jogo conta.</em>",
+lead:"Unusual Builder é um planejador de builds gratuito e não oficial para Wakfu. Escolha uma classe, equipe itens, runas e sublimações, selecione feitiços e passivas, e veja seus atributos atualizarem na hora.",
+open:"Abrir o builder",story_btn:"Nossa história",free_note:"Grátis. Sem conta. Funciona no celular.",
+s1h:"Fiel ao jogo",s1p:"Itens, raridades, níveis e atributos seguem os dados do jogo, e os requisitos dos itens são conferidos por jogadores experientes.",
+s2h:"Feito para o celular",s2p:"Projetado para uso confortável no smartphone. Salve suas builds e compartilhe por link ou código.",
+s3h:"Construído com a comunidade",s3p:"Presets da comunidade, relato de bugs dentro do app e atualizações guiadas pelo que os jogadores nos contam.",
+feat_eye:"O que faz",feat_h:"Tudo o que você precisa para uma build, em um só lugar.",
+f1h:"As 18 classes",f1p:"Feitiços e passivas de cada classe, com os níveis de desbloqueio do jogo.",
+f2h:"Banco de itens completo",f2p:"Busque por nome, nível, raridade e slot, em inglês, francês, espanhol e português.",
+f3h:"Atributos ao vivo",f3p:"Os totais atualizam conforme você equipa. Maestria e resistência contam nos elementos que você escolher.",
+f4h:"Requisitos de itens",f4p:"Um aviso aparece quando um item exige algo que sua build não cumpre, como um limite de PA ou PM.",
+f5h:"Salvar, compartilhar, explorar",f5p:"Guarde suas builds no aparelho, compartilhe por link ou código e navegue pelos presets da comunidade.",
+f6h:"Relatar um bug",f6p:"Viu um atributo errado ou um item faltando? Envie um relato de dentro do app.",
+story_eye:"Nossa história",story_h:"Os Unusual Italians",
+g1:"Os Unusual Italians nasceram em 2011, durante o beta de Wakfu, com a abertura do servidor internacional Remington. Muitos de nós já tinham jogado nas fases anteriores do beta e, embora a base de jogadores ativos tenha mudado bastante desde então, o núcleo duro dos Unusual continua entrando, impávido.",
+g2:"Por muito tempo fomos a única guilda de referência da comunidade italiana. Nossa única pretensão era oferecer um grupo unido para descobrir este jogo juntos.",
+g3:"Com o lançamento da versão Gold e o surgimento de novas guildas italianas, pudemos (e na verdade precisamos) fazer algumas mudanças. Escolhemos nos tornar uma grande guilda focada em uma única nação de Wakfu, restringindo um pouco os critérios de entrada sem trair nossas ideias originais.",
+g4:"Hoje jogamos no servidor Rubilax. Somos uma das guildas italianas mais ativas do jogo: um elenco menor que o das grandes guildas internacionais, mas um grupo unido e apaixonado que muitas vezes aparece entre as melhores guildas do ranking do jogo.",
+em_h:"Nosso emblema",e1:"O primeiro líder dos Unusual Italians criou a guilda com um fundo claro e engrenagens verdes. Esse estilo foi mantido desde então e respeitado por todos os líderes que vieram depois. Quando Neosboom e seu co-líder Palumma assumiram, cuidaram desse legado com ainda mais atenção.",e2:"Valorizamos ter uma história e, acima de tudo, construir uma comunidade italiana. O jogo é em inglês e os jogadores novos podem se sentir perdidos nos primeiros dias. Conosco encontram ajuda, um canal no Discord e pessoas reais que conhecem bem o jogo e como ele mudou ao longo do tempo. As duas engrenagens do nosso logo vêm desse emblema, e nós as mantivemos para o Unusual Builder.",credit:"Criado por <strong>Neosboom</strong>, líder da guilda Unusual Italians, que construiu o Unusual Builder no tempo livre, de graça, por amor ao jogo.",
+why_h:"Por que Unusual Builder?",
+w1:"O nome vem da nossa guilda, os <strong>Unusual Italians</strong>, que jogam Wakfu juntos desde 2011.",
+w2:"Nos últimos anos o jogo nos deu muitos motivos para voltar. As atualizações foram uma alegria, e uma nova comunidade italiana se formou em torno de Wakfu, com veteranos voltando e novos jogadores de alto nível chegando. Juntos redescobrimos o prazer do theorycraft, de compartilhar builds e de espremer cada último ponto de um set.",
+w3:"Com tantos itens, classes, passivas e mecânicas no jogo em 2026, sentimos que era a hora de criar algo nosso. O Unusual Builder foi criado por jogadores experientes, para jogadores. É um projeto de paixão, feito com um sorriso, que não se leva muito a sério.",
+v1:"O Unusual Builder foi feito para unir, não para dividir.",v2:"Ele existe para tornar Wakfu mais divertido e ajudar os jogadores a montar o personagem dos seus sonhos.",v3:"É gratuito, sem fins lucrativos, e feito por amor ao jogo.",v4:"Feito pela comunidade, para a comunidade. Vejo você nos Doze Mundos!",
+disc:"Wakfu é um MMORPG publicado pela Ankama. O Unusual Builder é um projeto de fãs não oficial, sem qualquer ligação com a Ankama. As imagens do jogo são propriedade da Ankama Games e/ou dos respectivos autores e não podem ser usadas para fins comerciais.",
+contact_eye:"Contato",contact_h:"Dúvidas, bugs, ideias",contact_p:"Escreva para nós. Você também pode usar o botão Relatar um bug dentro do app.",copy:"Copiar endereço",
+priv_eye:"Privacidade",priv_h:"Seus dados ficam com você",
+priv_p:"O Unusual Builder não pede que você crie uma conta. Suas builds, presets e configurações ficam guardados no seu navegador ou celular. Se você enviar um relato de bug, recebemos o texto que escrever, e usamos seu e-mail apenas para responder.",
+foot1:"Projeto de fãs gratuito",foot2:"Wakfu é um MMORPG publicado pela Ankama. O Unusual Builder é um projeto de fãs não oficial, sem qualquer ligação com a Ankama. As imagens do jogo são propriedade da Ankama Games e/ou dos respectivos autores e não podem ser usadas para fins comerciais."}
+};
+function setLang(l){
+  var d=T[l]||T.en;
+  document.documentElement.lang=l;
+  document.querySelectorAll("[data-i18n]").forEach(function(e){var v=d[e.dataset.i18n];e.textContent=v==null?T.en[e.dataset.i18n]:v});
+  document.querySelectorAll("[data-i18n-html]").forEach(function(e){var v=d[e.dataset.i18nHtml];e.innerHTML=v==null?T.en[e.dataset.i18nHtml]:v});
+  document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.lang===l?"true":"false")});
+  try{localStorage.setItem("ub_site_lang",l)}catch(e){}
+}
+document.querySelectorAll(".lang button").forEach(function(b){b.addEventListener("click",function(){setLang(b.dataset.lang)})});
+var cur="en";try{cur=localStorage.getItem("ub_site_lang")||"en"}catch(e){}
+if(!T[cur])cur="en";setLang(cur);
+document.getElementById("copy").addEventListener("click",function(){
+  var t=document.getElementById("mailtxt"),btn=this,old=btn.textContent;
+  function done(){btn.textContent="✓";setTimeout(function(){btn.textContent=old},1400)}
+  function sel(){var r=document.createRange();r.selectNodeContents(t);var s=getSelection();s.removeAllRanges();s.addRange(r)}
+  try{navigator.clipboard.writeText(t.textContent).then(done,sel)}catch(e){sel()}
+});
+</script>
