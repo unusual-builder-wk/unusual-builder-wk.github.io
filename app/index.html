@@ -69,6 +69,9 @@ nav button.on,.bar button.on{background:var(--gold);color:#1a1405;border-color:v
 .tc{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}.r2{display:flex;justify-content:space-between;gap:6px;padding:4px 6px;font-size:13px}.tc>div>.r2:nth-child(odd){background:var(--inner)}.r2 b{font-weight:700}.pos{color:#7ee08a}.neg{color:#ff6b6b}
 #picker{position:fixed;left:10px;right:10px;top:7vh;max-height:86vh;overflow:auto;z-index:100;margin:0 auto;max-width:440px;box-shadow:0 12px 40px #000c}
 #pbk{position:fixed;inset:0;background:#000b;z-index:99}
+@keyframes pfade{from{opacity:0}to{opacity:1}}@keyframes ppop{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}@keyframes pdrop{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
+.modal{animation:pfade .2s ease-out}.modal>.mbox{animation:ppop .26s cubic-bezier(.2,.8,.25,1)}#picker{animation:ppop .24s cubic-bezier(.2,.8,.25,1)}#ddbk{animation:pfade .15s ease-out}#ddov{animation:pdrop .18s ease-out}#toast2{animation:pdrop .2s ease-out}
+@media (prefers-reduced-motion:reduce){.modal,.modal>.mbox,#picker,#ddbk,#ddov,#toast2{animation:none}}
 .modal{position:fixed;inset:0;z-index:90;background:#000b;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow:auto}
 .mbox{background:var(--win);border:2px solid var(--gold);border-radius:12px;max-width:440px;width:100%;padding:12px;box-shadow:0 10px 36px #000c}
 .modal.hide,#pbk.hide{display:none}
@@ -1246,7 +1249,7 @@ var DESK=window.matchMedia("(min-width:1100px)");var CURTAB="build",LASTWORK="it
 function showSub(t){["eq","sp","ch"].forEach(function(k){$("p-"+k).classList.toggle("hide",k!==t);$("s-"+k).classList.toggle("on",k===t)});P=null;renderPicker()}
 /* ---------- events ---------- */
 $("t-build").onclick=function(){showTab("build")};$("t-items").onclick=function(){showTab("items")};$("t-spells").onclick=function(){showTab("spells")};$("t-stats").onclick=function(){showTab("stats")};$("t-saved").onclick=function(){showTab("saved")};
-$("t-presets").onclick=function(){showTab("presets")};
+$("t-presets").onclick=function(){showTab("presets")};$("t-ench").onclick=function(){showTab("ench")};
 (function(){var s=$("pf-cls");s.innerHTML='<option value="">All classes</option>'+CLASSES.map(function(c){return '<option value="'+c+'">'+c+'</option>'}).join("");
  s.onchange=function(){PF.cls=this.value;PF.n=25;renderPresets()};$("pf-lv").innerHTML='<option value="">All levels</option>'+PAL2.map(function(n){return '<option value="'+n+'">Lv. '+n+'</option>'}).join("");$("pf-lv").onchange=function(){PF.lv=this.value;PF.n=25;renderPresets()};$("pf-pub").onclick=function(){openPublish()}})();
 
