@@ -31,6 +31,7 @@ nav button.on,.bar button.on{background:var(--gold);color:#1a1405;border-color:v
 .col{display:flex;flex-direction:column;gap:8px}
 .mid{border:1px dashed var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--line);font-size:44px}
 .bot{display:flex;gap:8px;justify-content:center}
+.rmbtn{background:#d63a3a;border:1px solid #ff7b7b;color:#fff;font-weight:700;padding:4px 12px;border-radius:6px;margin-left:12px}.sx{position:absolute;left:-7px;top:-7px;width:20px;height:20px;border-radius:50%;background:#e03131;border:2px solid #fff;color:#fff;font-size:11px;font-weight:800;line-height:16px;text-align:center;z-index:3;cursor:pointer;padding:0}
 .sl{width:56px;height:56px;padding:0;background:var(--inner);border:2px solid #2d5568;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;position:relative}
 .sl .a{font-size:15px;font-weight:800}
 .sl .e{font-size:13px;color:#47697a}
@@ -302,7 +303,7 @@ main>#v-build,main>#v-build.hide{max-height:calc(100vh - 80px)}}
 </section>
 <div id="pbk" class="hide"></div>
 <div class="win hide" id="picker"></div>
-<div id="imodal" class="modal hide"><div class="mbox"><div class="mhd"><b style="color:var(--cy)">Item</b><button id="im-x" style="padding:4px 10px">&#10005;</button></div><div id="msel"></div><div id="runes"></div></div></div>
+<div id="imodal" class="modal hide"><div class="mbox"><div class="mhd"><b style="color:var(--cy)">Item</b><button id="im-rm" class="rmbtn hide">Remove</button><span style="flex:1"></span><button id="im-x" style="padding:4px 10px">&#10005;</button></div><div id="msel"></div><div id="runes"></div></div></div>
 <div id="aemodal" class="modal hide"><div class="mbox" style="max-width:600px"><div class="mhd"><b style="color:var(--cy)">Auto-enchant</b><button id="ae-x" style="padding:4px 10px">&#10005;</button></div><div id="ae-body"></div></div></div>
 <div id="smodal" class="modal hide"><div class="mbox"><div class="mhd"><b style="color:var(--cy)">Spell</b><button id="sm-x" style="padding:4px 10px">&#10005;</button></div><div id="msp"></div></div></div>
 <footer id="legal">Wakfu is an MMORPG published by Ankama. Unusual Builder is an unofficial fan project with no link to Ankama. Game images are the property of Ankama Games and/or their respective authors and may not be used for commercial purposes. Some spell descriptions are adapted from the <a href="https://wakfu.wiki.gg" target="_blank" rel="noopener" style="color:inherit">Wakfu Wiki</a> (CC BY-SA 3.0).</footer>
@@ -539,7 +540,7 @@ var SATTR=[["Damage inflicted",/damage (inflicted|dealt)/i],["Heals performed",/
 function subKind(z){return z.e?"epic":z.r?"relic":"normal"}
 function subTarget(){if(!SUBT)return null;var it=getItem(cur[SUBT.slot]);return it?{slot:SUBT.slot,it:it,x:SUBT.x}:null}
 function setMode(m){IS.mode="items";renderItems()}
-function goSub(slot,x){MODAL=false;renderSel();SUBT={slot:slot,x:x};SUBF.q="";SUBF.attr="";SUBF.rar="";SUBF.fit=true;showTab("ench");renderSub()}
+function goSub(slot,x){MODAL=false;renderSel();SUBT={slot:slot,x:x};SUBF.q="";SUBF.attr="";SUBF.rar="";SUBF.fit=true;showTab("ench");renderSub();setTimeout(function(){var u=$("sub-ui");if(u&&window.innerWidth<1100)u.scrollIntoView({behavior:"smooth",block:"start"})},60)}
 function subInit(){if(SUBF.init)return;SUBF.init=1;
  $("sx-type").innerHTML='<option value="">All types</option><option value="normal">Sublimation Scroll</option><option value="epic">Epic</option><option value="relic">Relic</option>';
  $("sx-rar").innerHTML='<option value="">All rarities</option>'+[2,3,4,5,7].map(function(i){return '<option value="'+i+'">'+RARN[i]+'</option>'}).join("");
@@ -548,6 +549,7 @@ function subInit(){if(SUBF.init)return;SUBF.init=1;
  $("sx-q").oninput=function(){SUBF.q=this.value;renderSub()};$("sx-type").onchange=function(){SUBF.type=this.value;renderSub()};$("sx-attr").onchange=function(){SUBF.attr=this.value;renderSub()};$("sx-fit").onchange=function(){SUBF.fit=this.checked;renderSub()}}
 function patChips(p){return p.length?p.map(function(c){return '<span style="display:inline-block;min-width:22px;text-align:center;border-radius:5px;background:'+RCOL[c][0]+'33;color:'+RCOL[c][0]+';margin-right:4px;padding:1px 5px;font-size:13px">'+RCOL[c][1]+'</span>'}).join(""):'<span class="mu" style="font-size:12px">No socket colors needed</span>'}
 function subRarInfo(z){var k=subKind(z);if(k==="epic")return["Epic","#ee6fc0"];if(k==="relic")return["Relic","#b46bf0"];var q=SUBRI[String(z.i)];return q!=null&&RARS[q]?[RARN[q],RARS[q][1]]:["","#9aa5ab"]}
+function anyCol(T){return (T.it.sh?rnList(T.slot,T.it):[]).some(function(x){return x.c!==0})}
 function renderSub(){subInit();var T=subTarget();
  var cols=function(a){return a.map(function(x){return RCOL[x.c][1]}).join(" ")};
  var b='';
@@ -567,7 +569,7 @@ function renderSub(){subInit();var T=subTarget();
   if(SUBF.rar!==""){var zk=subKind(z),zr=zk==="epic"?7:zk==="relic"?5:SUBRI[String(z.i)];if(String(zr)!==SUBF.rar)return false}
   if(q&&norm(z.n[LI]).indexOf(q)<0)return false;
   if(re&&!re.test(ef(z)+" "+subTxt(z)+" "+z.n[0]))return false;
-  if(T&&T.x==="sb"&&SUBF.fit&&!subOk(z,T.it.sh?rnList(T.slot,T.it):[]))return false;
+  if(T&&T.x==="sb"&&SUBF.fit&&anyCol(T)&&!subOk(z,T.it.sh?rnList(T.slot,T.it):[]))return false;
   return true}).sort(function(p,q2){var bp=String(p.n[0]).replace(/\s+(I|II|III)$/,""),bq=String(q2.n[0]).replace(/\s+(I|II|III)$/,"");return bp<bq?-1:bp>bq?1:(subLvl(q2)-subLvl(p))});
  var sk=JSON.stringify([SUBF.q,SUBF.type,SUBF.rar,SUBF.attr,SUBF.fit,SUBT&&SUBT.slot,SUBT&&SUBT.x]);if(SUBF.sk!==sk){SUBF.sk=sk;SUBF.lim=40}
  $("sx-info").textContent=l.length+" sublimation"+(l.length===1?"":"s")+(l.length>(SUBF.lim||40)?" · showing "+(SUBF.lim||40):"")+(T&&T.x==="sb"?" · level III is the strongest":"");
@@ -748,14 +750,14 @@ var SEL=null,SELS=null,MODAL=false;
 function slotType(x){return String(x).replace(/\d$/,"")}
 function goChange(slot){MODAL=false;renderSel();var t=slotType(slot);isInit();IS.slot=(t==="FIRST_WEAPON"||t==="SECOND_WEAPON")?"WEAPON":t;IS.type=t==="FIRST_WEAPON"?"1h":t==="SECOND_WEAPON"?"shield":"";IS.rar="";IS.q="";IS.stat="";IS.stat2="";IS.stat3="";$("is-slot").value=IS.slot;$("is-rar").value="";$("is-q").value="";$("is-stat").value="";$("is-stat2").value="";$("is-stat3").value="";showTab("items");renderItems()}
 function closeItem(){MODAL=false;SEL=null;renderAll()}
-function renderSel(){var box=$("msel"),md=$("imodal");if(!box)return;var open=!!(MODAL&&SEL);md.classList.toggle("hide",!open);if(!open){box.innerHTML="";return}
+function rmItem(s){delete cur[s];delete rn[s];delete sb[s];delete xe[s];MODAL=false;SEL=null;renderAll()}
+function renderSel(){var box=$("msel"),md=$("imodal");if(!box)return;var open=!!(MODAL&&SEL);md.classList.toggle("hide",!open);var rb=$("im-rm");if(rb){rb.classList.toggle("hide",!(open&&getItem(cur[SEL])));rb.onclick=function(){if(SEL)rmItem(SEL)}}if(!open){box.innerHTML="";return}
  var it=getItem(cur[SEL]),nm=N("slot",SEL);
  if(!it){box.innerHTML='<div class="item"><div><b>'+esc(nm)+'</b><div class="st">Empty slot</div></div><button class="pri" id="sel-ch" style="flex:none">Choose item</button></div>'}
  else{var ic=ICO[String(cur[SEL])];var st=it.stats.map(function(x){return (ICON[x.id]||"")+esc(sname(x.id))+" "+(x.v>0?"+":"")+x.v}).join(", ");
-  box.innerHTML='<div class="item" style="border-left:5px solid '+RARS[it.r][1]+';align-items:flex-start;gap:8px">'+(ic?'<img src="'+ic+'" style="width:52px;height:52px;border-radius:6px;flex:none">':"")+'<div style="min-width:0;flex:1"><div><b style="font-size:16px">'+esc(it.name)+'</b></div><div style="margin:4px 0;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center"><span>'+tyBadge(SEL,IDX[cur[SEL]],IDX[cur[SEL]]&&IDX[cur[SEL]].y,24)+'</span><span style="color:'+RARS[it.r][1]+'">'+gem(it.r,20)+' '+RARN[it.r]+'</span><span class="mu">Lv.'+it.lv+'</span></div><div class="st">'+st+'</div>'+xePicker(SEL,it)+itemEffHtml(cur[SEL])+'</div></div><div class="bar"><button id="sel-ch">Change</button><button id="sel-rm">Remove</button></div>'}
+  box.innerHTML='<div class="item" style="border-left:5px solid '+RARS[it.r][1]+';align-items:flex-start;gap:8px">'+(ic?'<img src="'+ic+'" style="width:52px;height:52px;border-radius:6px;flex:none">':"")+'<div style="min-width:0;flex:1"><div><b style="font-size:16px">'+esc(it.name)+'</b></div><div style="margin:4px 0;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center"><span>'+tyBadge(SEL,IDX[cur[SEL]],IDX[cur[SEL]]&&IDX[cur[SEL]].y,24)+'</span><span style="color:'+RARS[it.r][1]+'">'+gem(it.r,20)+' '+RARN[it.r]+'</span><span class="mu">Lv.'+it.lv+'</span></div><div class="st">'+st+'</div>'+xePicker(SEL,it)+itemEffHtml(cur[SEL])+'</div></div>'}
  Array.prototype.forEach.call(box.querySelectorAll("[data-xe]"),function(b){b.onclick=function(){var p=b.getAttribute("data-xe").split("|"),n=parseInt(p[1].charAt(2)),a=xeList(p[0],p[1]).slice();if(a.indexOf(p[2])<0){a.push(p[2]);while(a.length>n)a.shift()}(xe[p[0]]=xe[p[0]]||{})[p[1]]=a;renderAll()}});
- var c=$("sel-ch");if(c)c.onclick=function(){goChange(SEL)};
- var r=$("sel-rm");if(r)r.onclick=function(){delete cur[SEL];delete rn[SEL];delete sb[SEL];delete xe[SEL];MODAL=false;SEL=null;renderAll()}}
+}
 function sumBtn(arr,i,need,kind){var b=spBtn(arr,i,need,kind);var locked=lv()&&lv()<need;
  b.onclick=function(){if(locked)return;SELS=(SELS&&SELS.k===kind&&SELS.i===i)?null:{k:kind,i:i};renderSumSpells()};
  if(SELS&&SELS.k===kind&&SELS.i===i)b.style.boxShadow="0 0 0 2px #d9b25c";return b}
@@ -790,7 +792,7 @@ function slotBtn(s){
  b.className="sl"+(SEL===s?" sel":"");if(getItem(cur[s]))b.setAttribute("data-hs",s);b.title=nm;if(dis)b.style.opacity=".35";
  if(it){var pr=itemProblems(s);b.style.borderColor=pr.length?"#ff4d4d":RARS[it.r][1];if(pr.length){b.style.boxShadow="0 0 0 2px #ff4d4d55";b.title=nm+" — "+pr.join("; ")}var ic=ICO[String(cur[s])];b.innerHTML=(ic?'<img src="'+ic+'" style="position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:6px;object-fit:cover;opacity:.95">':'<span class="a">'+esc(it.name.slice(0,2))+'</span>')+'<span class="n" style="'+(ic?"position:absolute;left:3px;bottom:1px;text-shadow:0 0 3px #000,0 0 3px #000;":"")+(pr.length?"color:#ff6b6b":"")+'">Lv.'+it.lv+'</span>'+((it.r===5||it.r===7||it.r===6)?'<span class="n" style="font-weight:800;color:'+RARS[it.r][1]+';'+(ic?"position:absolute;right:3px;top:1px;font-size:9px;text-shadow:0 0 3px #000,0 0 3px #000;":"")+'">'+(it.r===5?"Relic":it.r===7?"Epic":"Souv.")+'</span>':"")}
  else b.innerHTML=slotIcon(s)?'<img src="'+slotIcon(s)+'" style="width:30px;height:30px;opacity:.38;image-rendering:auto">':'<span class="e">'+esc(nm.slice(0,3))+'</span>';
- if(it)b.insertAdjacentHTML("beforeend",slotMarks(s,it));
+if(it){b.insertAdjacentHTML("beforeend",slotMarks(s,it));var xb=document.createElement("span");xb.className="sx";xb.title="Remove item";xb.textContent="\u2715";xb.onclick=function(e){e.stopPropagation();e.preventDefault();rmItem(s)};b.appendChild(xb)}
  b.onclick=function(){if(dis)return;SEL=s;if(!getItem(cur[s])){goChange(s);renderSlots();return}MODAL=true;renderAll()};
  return b;
 }
@@ -980,7 +982,7 @@ var ELN=["Fire","Water","Earth","Air"];
 function xeList(slot,id){var n=parseInt(String(id).charAt(2));var a=xe[slot]&&xe[slot][id];if(!a||a.length!==n)a=elOrder.slice(0,n);return a}
 function elVar(t){var o={m:{},r:{}};Object.keys(cur).forEach(function(k){var it=getItem(cur[k]);if(!it)return;it.stats.forEach(function(x){if(!/^e[mr][123]$/.test(x.id))return;var T=x.id.charAt(1)==="m"?"m":"r";xeList(k,x.id).forEach(function(e){o[T][e]=(o[T][e]||0)+x.v});t[x.id]=(t[x.id]||0)-x.v})});return o}
 function xePicker(slot,it){var h="";it.stats.forEach(function(x){if(!/^e[mr][123]$/.test(x.id))return;var n=parseInt(x.id.charAt(2)),sel=xeList(slot,x.id),isM=x.id.charAt(1)==="m";
- h+='<div style="margin:6px 0 2px"><div class="mu" style="font-size:12px">'+(isM?"Mastery":"Resistance")+' '+(x.v>0?"+":"")+x.v+' &mdash; choose '+n+' element'+(n>1?"s":"")+' ('+(isM?"mastery":"resistance")+' is applied to each chosen element)</div><div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap">'+ELN.map(function(e){var on=sel.indexOf(e)>=0;return '<button data-xe="'+slot+'|'+x.id+'|'+e+'" style="flex:none;padding:5px 12px;border-radius:14px;font-size:13px;border:2px solid '+ELC[e]+';background:'+(on?ELC[e]:"transparent")+';color:'+(on?"#10141a":ELC[e])+';font-weight:700">'+(ICON["m"+e]||"")+e+'</button>'}).join("")+'</div></div>'});return h}
+ h+='<div style="margin:6px 0 2px"><div class="mu" style="font-size:12px">'+(isM?"Mastery":"Resistance")+' '+(x.v>0?"+":"")+x.v+' &mdash; choose '+n+' element'+(n>1?"s":"")+' ('+(isM?"mastery":"resistance")+' is applied to each chosen element)</div><div style="display:flex;gap:4px;margin-top:4px;flex-wrap:nowrap">'+ELN.map(function(e){var on=sel.indexOf(e)>=0;return '<button data-xe="'+slot+'|'+x.id+'|'+e+'" style="flex:1 1 0;min-width:0;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:2px;margin:0;padding:5px 2px;border-radius:14px;font-size:11.5px;border:2px solid '+ELC[e]+';background:'+(on?ELC[e]:"transparent")+';color:'+(on?"#10141a":ELC[e])+';font-weight:700">'+(ICON["m"+e]||"")+e+'</button>'}).join("")+'</div></div>'});return h}
 /* ---------- character sheet ---------- */
 function renderSheet(){
  var t={};
@@ -2944,7 +2946,8 @@ var DDI={
  "is-type":function(v){if(!v)return"";if(IS.slot==="WEAPON"){var k={"1h":"FIRST_WEAPON","2h":"FIRST_WEAPON2","2nd":"SECOND_WEAPON","dagger":"","shield":"SECOND_WEAPON"}[v];var i=k?ICOT[k]:ICOT.SECOND_WEAPON;return i?'<img src="'+i+'" style="width:24px;height:24px">':""}var i2=slotIcon(IS.slot);return i2?'<img src="'+i2+'" style="width:24px;height:24px">':""},
  "is-rar":function(v){return v===""?"":gem(+v,20)},
  "sx-type":function(v){return v==="epic"?gem(7,20):v==="relic"?gem(5,20):v==="normal"?'<img src="'+SCROLL+'" style="width:24px;height:24px">':""},
- "bcls":function(v){return v?emblem(v,28):""}
+ "bcls":function(v){return v?emblem(v,28):""},
+ "is-stat":function(v){var i=v?ICON[v]:"";return i?'<span style="width:26px;display:inline-flex;justify-content:center;font-size:20px">'+i+"</span>":""},"is-stat2":function(v){var i=v?ICON[v]:"";return i?'<span style="width:26px;display:inline-flex;justify-content:center;font-size:20px">'+i+"</span>":""},"is-stat3":function(v){var i=v?ICON[v]:"";return i?'<span style="width:26px;display:inline-flex;justify-content:center;font-size:20px">'+i+"</span>":""}
 };
 function ddIco(sel,v){var f=DDI[sel.id];return f?(f(v)||""):""}
 function ddOpen(sel){var bk=document.createElement("div");bk.id="ddbk";var ov=document.createElement("div");ov.id="ddov";
