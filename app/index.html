@@ -331,7 +331,7 @@ function N(g,k){return (I18N[LANG][g]&&I18N[LANG][g][k])||I18N.en[g][k]||k}
 var LEFT=["HEAD","NECK","CHEST","RING1"],RIGHT=["BACK","SHOULDERS","BELT","RING2"],BOT=["LEGS","SECOND_WEAPON","FIRST_WEAPON","ACCESSORY","MOUNT","PET"];
 var RARS=[["common","#9aa5ab"],["uncommon","#d5dbe0"],["rare","#4ec96a"],["mythic","#f0a030"],["legendary","#f5d142"],["relic","#b46bf0"],["memory","#5fb0ff"],["epic","#ee6fc0"]];
 var EL=[["water","#4aa8e8"],["earth","#7bc043"],["air","#b36be0"],["fire","#f0663a"],["neutral","#d9b25c"],["light","#f1e6a8"]];
-var RARN=["Common","Uncommon","Rare","Mythic","Legendary","Relic","Souvenir","Epic"];
+var RARORD=[0,1,2,3,4,6,7,5];var RARN=["Common","Uncommon","Rare","Mythic","Legendary","Relic","Souvenir","Epic"];
 var ELC={Fire:"#f0663a",Water:"#4aa8e8",Earth:"#b5d33d",Air:"#d86ad9"};
 var CLASSES=["Feca","Osamodas","Enutrof","Sram","Xelor","Ecaflip","Eniripsa","Iop","Cra","Sadida","Sacrier","Pandawa","Rogue","Masqueraider","Ouginak","Foggernaut","Eliotrope","Huppermage"];
 var ACT_LV=[1,1,1,1,1,1,1,1,30,40,60,80],PAS_LV=[1,30,50,100,150,200];
@@ -556,7 +556,7 @@ function setMode(m){IS.mode="items";renderItems()}
 function goSub(slot,x){MODAL=false;renderSel();SUBT={slot:slot,x:x};SUBF.q="";SUBF.attr="";SUBF.rar="";SUBF.fit=true;showTab("ench");renderSub();setTimeout(function(){var u=$("sub-ui");if(u&&window.innerWidth<1100)u.scrollIntoView({behavior:"smooth",block:"start"})},60)}
 function subInit(){if(SUBF.init)return;SUBF.init=1;
  $("sx-type").innerHTML='<option value="">All types</option><option value="normal">Sublimation Scroll</option><option value="epic">Epic</option><option value="relic">Relic</option>';
- $("sx-rar").innerHTML='<option value="">All rarities</option>'+[2,3,4,5,7].map(function(i){return '<option value="'+i+'">'+RARN[i]+'</option>'}).join("");
+ $("sx-rar").innerHTML='<option value="">All rarities</option>'+[2,3,4,7,5].map(function(i){return '<option value="'+i+'">'+RARN[i]+'</option>'}).join("");
  $("sx-rar").onchange=function(){SUBF.rar=this.value;renderSub()};
  $("sx-attr").innerHTML='<option value="">Any attribute</option>'+SATTR.map(function(a,i){return '<option value="'+i+'">'+esc(a[0])+'</option>'}).join("");
  $("sx-q").oninput=function(){SUBF.q=this.value;renderSub()};$("sx-type").onchange=function(){SUBF.type=this.value;renderSub()};$("sx-attr").onchange=function(){SUBF.attr=this.value;renderSub()};$("sx-fit").onchange=function(){SUBF.fit=this.checked;renderSub()}}
@@ -698,7 +698,7 @@ function renderPicker(){
  p.classList.remove("hide");$("pbk").classList.remove("hide");
  if(P.lp){lpRender();return}
  if(P.eq){
-  p.innerHTML='<div class="hd"><span>'+esc(P.title)+(lv()?' · tier Lv.'+lv():'')+'</span></div><div class="bd"><input id="pq" placeholder="Search by name" value="'+esc(P.q)+'"><select id="pr"><option value="">All rarities</option>'+RARN.map(function(n,i){return '<option value="'+i+'"'+(String(P.rar)===String(i)?" selected":"")+'>'+n+'</option>'}).join("")+'</select><label class="mu" style="display:block;margin:0 0 8px"><input type="checkbox" id="pall" style="width:auto;margin:0 6px 0 0"'+(P.all?" checked":"")+'>Include lower levels</label><div id="plist"></div></div>';
+  p.innerHTML='<div class="hd"><span>'+esc(P.title)+(lv()?' · tier Lv.'+lv():'')+'</span></div><div class="bd"><input id="pq" placeholder="Search by name" value="'+esc(P.q)+'"><select id="pr"><option value="">All rarities</option>'+RARORD.map(function(i){var n=RARN[i];return '<option value="'+i+'"'+(String(P.rar)===String(i)?" selected":"")+'>'+n+'</option>'}).join("")+'</select><label class="mu" style="display:block;margin:0 0 8px"><input type="checkbox" id="pall" style="width:auto;margin:0 6px 0 0"'+(P.all?" checked":"")+'>Include lower levels</label><div id="plist"></div></div>';
   $("pq").oninput=function(){P.q=this.value;eqList()};$("pr").onchange=function(){P.rar=this.value;eqList()};$("pall").onchange=function(){P.all=this.checked;eqList()};eqList();return;
  }
  var h='<div class="hd"><span>'+esc(P.title)+'</span></div><div class="bd">';
@@ -1221,7 +1221,7 @@ var IS={q:"",slot:"",rar:"",stat:"",min:"",max:"",init:0,mode:"items",type:""};
 var ISLOTS=["HEAD","NECK","CHEST","SHOULDERS","BACK","BELT","RING","LEGS","WEAPON","ACCESSORY","PET","MOUNT"];
 function isInit(){if(IS.init)return;IS.init=1;
  var sl=$("is-slot");sl.innerHTML='<option value="">All item types</option>'+ISLOTS.map(function(p){return '<option value="'+p+'">'+esc(N("slot",p==="RING"?"RING1":p==="WEAPON"?"FIRST_WEAPON":p))+'</option>'}).join("");
- $("is-rar").innerHTML='<option value="">All rarities</option>'+RARN.map(function(n,i){return '<option value="'+i+'">'+n+'</option>'}).join("");
+ $("is-rar").innerHTML='<option value="">All rarities</option>'+RARORD.map(function(i){var n=RARN[i];return '<option value="'+i+'">'+n+'</option>'}).join("");
  var ids={};DATA.forEach(function(o){o.s.forEach(function(x){ids[x[0]]=1})});
  var arr=Object.keys(ids).map(function(k){return[k,sname(k).replace(/^%\s*/,"")]}).sort(function(a,b){return a[1]<b[1]?-1:1});
  var sopt=arr.map(function(a){return '<option value="'+a[0]+'">'+esc(a[1])+'</option>'}).join("");
