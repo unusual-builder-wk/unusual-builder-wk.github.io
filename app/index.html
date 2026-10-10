@@ -45,8 +45,9 @@ nav button.on,.bar button.on{background:var(--gold);color:#1a1405;border-color:v
 .edlg .na{display:flex;align-items:center;gap:8px;margin:14px 0;font-size:15px;cursor:pointer;background:none;border:0;padding:0;color:#e6e2d6}
 .edlg .ec img{width:26px;height:26px}.edlg .ok{width:100%;margin:0;padding:12px;font:700 20px Georgia,serif;border-radius:8px;border:2px solid #8a7440;background:linear-gradient(#f1dc95,#d9b95f);color:#3b3115}
 .edlg .ok[disabled]{opacity:.45}
-.xchg{display:inline-flex;gap:2px;align-items:center;padding:3px 6px;margin:0 0 0 4px;border-radius:10px;border:1px solid #ffffff55;background:#ffffff14;vertical-align:middle}
-.xchg i{display:block;width:9px;height:9px;border-radius:50%}
+.xchg{position:relative;display:inline-flex;align-items:stretch;padding:0;margin:0 0 0 4px;border-radius:8px;border:1px solid #0008;overflow:hidden;vertical-align:middle;height:22px;background:none}
+.xchg span{display:flex;align-items:center;justify-content:center;width:30px;opacity:.95}.xchg span img{width:13px;height:13px}
+.xchg b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#000;font-size:12px;font-weight:800;text-shadow:0 0 3px #fff,0 0 3px #fff}
 .rmbtn{background:#d63a3a;border:1px solid #ff7b7b;color:#fff;font-weight:700;padding:4px 12px;border-radius:6px;margin-left:12px}.sx{position:absolute;left:-7px;top:-7px;width:20px;height:20px;border-radius:50%;background:#e03131;border:2px solid #fff;color:#fff;font-size:11px;font-weight:800;line-height:16px;text-align:center;z-index:3;cursor:pointer;padding:0}
 .sl{width:56px;height:56px;padding:0;background:var(--inner);border:2px solid #2d5568;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;position:relative}
 .sl .a{font-size:15px;font-weight:800}
@@ -496,7 +497,7 @@ function statGroups(stats,hl,slot,chg){var out=[],used={};
     h:all?(ICON[g[2]]||"")+esc(g[3])+" "+(+v>0?"+":"")+v:(ICON[g[2]]||"")+g[1]+" "+(+v>0?"+":"")+v+' <span style="white-space:nowrap">'+ELN.filter(function(e){return els.indexOf(e)>=0}).map(function(e){return ICON["m"+e]||e}).join("")+"</span>"})})});
  stats.forEach(function(x,i){if(used[i])return;var nm=esc(sname(x.id));
   if(slot&&/^e[mr][123]$/.test(x.id)){nm=esc(sname(x.id).replace(/\s*[123]\s+\S+\s*$/,""))+' <span style="white-space:nowrap">'+xeList(slot,x.id).map(function(e){return ICON["m"+e]||e}).join("")+'</span>'}
-  out.push({at:i,hl:hl&&hl(x.id),h:(ICON[x.id]||"")+nm+" "+(x.v>0?"+":"")+x.v+(slot&&chg&&/^e[mr][123]$/.test(x.id)?' <button class="xchg" data-xechg="'+slot+'" title="Change elements"><i style="background:'+ELC.Fire+'"></i><i style="background:'+ELC.Water+'"></i><i style="background:'+ELC.Earth+'"></i><i style="background:'+ELC.Air+'"></i></button>':"")})});
+  out.push({at:i,hl:hl&&hl(x.id),h:(ICON[x.id]||"")+nm+" "+(x.v>0?"+":"")+x.v+(slot&&chg&&/^e[mr][123]$/.test(x.id)?' <button class="xchg" data-xechg="'+slot+'" title="Change elements">'+ELN.map(function(e){return '<span style="background:'+ELC[e]+'">'+(ICON["m"+e]||"")+'</span>'}).join("")+'<b>Change</b></button>':"")})});
  out.sort(function(a,b){return a.at-b.at});return out}
 function statsHtml(stats,hl,slot,chg){return statGroups(stats,hl,slot,chg).map(function(g){var t='<span style="white-space:nowrap">'+nb(g.h)+"</span>";return g.hl?'<b style="color:#9be35a">'+t+"</b>":t}).join(", ")}
 function tipStats(it){var m={};it.stats.forEach(function(x){m[x.id]=(m[x.id]||0)+x.v});return m}
@@ -737,7 +738,7 @@ function equip(s,id){
  if(it.r===5||it.r===7){var clash=null;Object.keys(cur).forEach(function(k){var o=getItem(cur[k]);if(k!==s&&o&&o.r===it.r)clash=o});
   if(clash){var nm=it.r===5?"Relic":"Epic";toast("You can only wear one "+nm+" item. "+clash.name+" is already equipped. Remove it first.");return false}}
  if(s==="FIRST_WEAPON"&&it.tw)delete cur.SECOND_WEAPON;
- cur[s]=id;delete rn[s];delete sb[s];delete xe[s];setTimeout(function(){elemDlg(s,true)},60);return true;
+ cur[s]=id;delete rn[s];delete sb[s];delete xe[s];setTimeout(function(){elemDlg(s)},60);return true;
 }
 function eqList(){
  var pos=P.key.replace(/\d$/,""),q=norm(P.q),L=lv();
@@ -1012,22 +1013,20 @@ function renderApt(){
 }
 /* ---------- per-item element choice (variable mastery/resistance) ---------- */
 var ELN=["Fire","Water","Earth","Air"];
-var NOASK=false;try{NOASK=localStorage.getItem("wk_noask")==="1"}catch(e){}
 function elemIds(slot){var it=getItem(cur[slot]);return it?it.stats.filter(function(x){return /^e[mr][123]$/.test(x.id)}):[]}
-function elemDlg(slot,fromEquip){var ids=elemIds(slot);if(!ids.length)return;if(fromEquip&&NOASK)return;
+function elemDlg(slot){var ids=elemIds(slot);if(!ids.length)return;
  var old=$("edlg");if(old)old.remove();
  var sel={};ids.forEach(function(x){sel[x.id]=xeList(slot,x.id).slice()});
- var o=document.createElement("div");o.id="edlg";o.className="edlg";document.body.appendChild(o);
+ var o=document.createElement("div");o.id="edlg";o.className="edlg";o.innerHTML='<div class="eb"></div>';document.body.appendChild(o);var eb=o.firstChild;
  function close(){o.remove()}
- function draw(){var h='<div class="eb"><div class="eh">Choose Elements<button class="ex" id="ed-x">\u2715</button></div><div class="ebd"><div class="et">Choose the elements to assign to the item\'s effects. This choice is not permanent; the elements can be changed at will.</div>';
+ function draw(){var h='<div class="eh">Choose Elements<button class="ex" id="ed-x">\u2715</button></div><div class="ebd"><div class="et">Choose the elements to assign to the item\'s effects. This choice is not permanent; the elements can be changed at will.</div>';
   var ok=true;
   ids.forEach(function(x){var n=parseInt(x.id.charAt(2)),isM=x.id.charAt(1)==="m",a=sel[x.id];if(a.length!==n)ok=false;
    h+='<h4>'+(isM?"Mastery":"Resistance")+' ('+a.length+'/'+n+')</h4><div class="edr">'+ELN.map(function(e){var on=a.indexOf(e)>=0;return '<button class="ec" data-ed="'+x.id+'|'+e+'"><span class="cb'+(on?' on':'')+'"><i></i></span>'+(ICON["m"+e]||e)+'</button>'}).join("")+'</div>'});
-  h+='<button class="na" id="ed-na"><span class="cb'+(NOASK?' on':'')+'"><i></i></span>Do not ask when an item is identified</button><button class="ok" id="ed-ok"'+(ok?'':' disabled')+'>Confirm</button></div></div>';
-  o.innerHTML=h;
+  h+='<button class="ok" id="ed-ok"'+(ok?'':' disabled')+'>Confirm</button></div>';
+  eb.innerHTML=h;
   $("ed-x").onclick=close;o.onclick=function(e){if(e.target===o)close()};
   Array.prototype.forEach.call(o.querySelectorAll("[data-ed]"),function(b){b.onclick=function(){var p=b.getAttribute("data-ed").split("|"),n=parseInt(p[0].charAt(2)),a=sel[p[0]],i=a.indexOf(p[1]);if(i>=0)a.splice(i,1);else{a.push(p[1]);while(a.length>n)a.shift()}draw()}});
-  $("ed-na").onclick=function(){NOASK=!NOASK;try{localStorage.setItem("wk_noask",NOASK?"1":"0")}catch(e){}draw()};
   $("ed-ok").onclick=function(){ids.forEach(function(x){(xe[slot]=xe[slot]||{})[x.id]=ELN.filter(function(e){return sel[x.id].indexOf(e)>=0})});close();renderAll()}}
  draw()}
 function xeList(slot,id){var n=parseInt(String(id).charAt(2));var a=xe[slot]&&xe[slot][id];if(!a||a.length!==n)a=elOrder.slice(0,n);return a}
