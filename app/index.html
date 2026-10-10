@@ -69,8 +69,8 @@ nav button.on,.bar button.on{background:var(--gold);color:#1a1405;border-color:v
 .tc{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}.r2{display:flex;justify-content:space-between;gap:6px;padding:4px 6px;font-size:13px}.tc>div>.r2:nth-child(odd){background:var(--inner)}.r2 b{font-weight:700}.pos{color:#7ee08a}.neg{color:#ff6b6b}
 #picker{position:fixed;left:10px;right:10px;top:7vh;max-height:86vh;overflow:auto;z-index:100;margin:0 auto;max-width:440px;box-shadow:0 12px 40px #000c}
 #pbk{position:fixed;inset:0;background:#000b;z-index:99}
-@keyframes pfade{from{opacity:0}to{opacity:1}}@keyframes ppop{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}@keyframes pdrop{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
-.modal{animation:pfade .2s ease-out}.modal>.mbox{animation:ppop .26s cubic-bezier(.2,.8,.25,1)}#picker{animation:ppop .24s cubic-bezier(.2,.8,.25,1)}#ddbk{animation:pfade .15s ease-out}#ddov{animation:pdrop .18s ease-out}#toast2{animation:pdrop .2s ease-out}
+@keyframes pfade{from{opacity:0}to{opacity:1}}@keyframes ppop{from{opacity:0;transform:translateY(34px) scale(.93)}to{opacity:1;transform:none}}@keyframes pdrop{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
+.modal{animation:pfade .4s ease-out}.modal>.mbox{animation:ppop .55s cubic-bezier(.16,.84,.3,1)}#picker{animation:ppop .45s cubic-bezier(.16,.84,.3,1)}#ddbk{animation:pfade .25s ease-out}#ddov{animation:pdrop .3s ease-out}#toast2{animation:pdrop .2s ease-out}
 @media (prefers-reduced-motion:reduce){.modal,.modal>.mbox,#picker,#ddbk,#ddov,#toast2{animation:none}}
 .modal{position:fixed;inset:0;z-index:90;background:#000b;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow:auto}
 .mbox{background:var(--win);border:2px solid var(--gold);border-radius:12px;max-width:440px;width:100%;padding:12px;box-shadow:0 10px 36px #000c}
@@ -394,6 +394,11 @@ function enSocket(s,it,i,x){
  return h+'<button class="en-ch" data-ee="'+s+'|'+i+'">Change</button><button class="en-ch" data-ex="'+s+'|'+i+'" style="color:var(--bad)">Remove</button></div>'}
 if(typeof DESK!=="undefined")try{DESK.addEventListener("change",function(){try{renderEnch()}catch(e){}})}catch(e){}
 var ENSEL=null,ENAUTO=true,ENLVL=10,ENSLOTS=["HEAD","NECK","CHEST","SHOULDERS","BACK","BELT","RING1","RING2","LEGS","FIRST_WEAPON","SECOND_WEAPON"];
+var ENDC={k:"",t:0},ENBK={};
+function enToggle(s,i){var it=getItem(cur[s]);if(!it||!it.sh)return;var a=rnList(s,it),x=a[i],k=s+"|"+i,lk=slotLockedBy(s,i);
+ if(x.r&&RI[x.r]){ENBK[k]={it:cur[s],r:x.r,c:x.c,l:x.l||0};x.r=null;x.l=0;if(!lk)x.c=0;ENSEL={s:s,i:i};renderAll();toast2("Effect removed \u00b7 double-click the socket again to bring it back")}
+ else if(ENBK[k]&&ENBK[k].it===cur[s]){var b=ENBK[k];if(lk&&lk&&x.c&&x.c!==b.c){toast("This socket color is required by "+lk.n[LI]+".");return}x.r=b.r;x.c=b.c;x.l=b.l;delete ENBK[k];ENSEL={s:s,i:i};renderAll();toast2("Effect restored")}
+ else{ENSEL={s:s,i:i};renderEnch()}}
 function enApply(r){var E=ENSEL;if(!E){toast("Tap an item or one of its sockets first.");return}var s=E.s,it=getItem(cur[s]);if(!it||!it.sh)return;var a=rnList(s,it),i=E.i;
  if(i==null||i>=a.length){i=-1;a.forEach(function(x,k){if(i<0&&!x.r&&(!x.c||x.c===r.c))i=k});if(i<0)a.forEach(function(x,k){if(i<0&&(!x.c||x.c===r.c))i=k});if(i<0){toast("This item has no "+RCOL[r.c][2].toLowerCase()+" or free socket.");return}}
  var cx=a[i];if(cx.c&&cx.c!==r.c){toast("Socket "+(i+1)+" is "+RCOL[cx.c][2].toLowerCase()+": it takes only "+RCOL[cx.c][2].toLowerCase()+" effects.");return}
@@ -446,12 +451,14 @@ function renderEnch(){
  if($("mpal"))enPalWire($("mpal"));
  var q=function(sel,fn){Array.prototype.forEach.call($("en-list").querySelectorAll(sel),fn)};
  q("[data-esel]",function(b){b.onclick=function(){var s=b.getAttribute("data-esel");ENSEL=(ENSEL&&ENSEL.s===s&&ENSEL.i==null)?null:{s:s,i:null};renderEnch()}});
- q("[data-es]",function(b){b.onclick=function(){var a=b.getAttribute("data-es").split("|"),s=a[0],i=+a[1];ENSEL={s:s,i:i};renderEnch()}});
+ q("[data-es]",function(b){b.onclick=function(){var a=b.getAttribute("data-es").split("|"),s=a[0],i=+a[1],k=s+"|"+i,now=Date.now();
+  if(ENDC.k===k&&now-ENDC.t<450){ENDC={k:"",t:0};enToggle(s,i);return}
+  ENDC={k:k,t:now};ENSEL={s:s,i:i};renderEnch()}});
  q("[data-ec]",function(b){b.onclick=function(){var a=b.getAttribute("data-ec").split("|");pickSlotColor(a[0],+a[1])}});
  q("[data-ex]",function(b){b.onclick=function(){var a=b.getAttribute("data-ex").split("|"),x=rn[a[0]][+a[1]];x.r=null;x.l=0;renderAll()}});
  q("[data-ca]",function(b){b.onclick=function(){var s=b.getAttribute("data-ca");(rn[s]||[]).forEach(function(x){x.r=null;x.l=0});renderAll()}});
  q("[data-gs]",function(b){b.onclick=function(){var a=b.getAttribute("data-gs").split("|");goSub(a[0],a[1])}});
- q("[data-em]",function(b){b.onclick=function(){var s=b.getAttribute("data-em");rn[s].forEach(function(x){x.l=0});renderAll()}});
+ q("[data-em]",function(b){b.onclick=function(){var s=b.getAttribute("data-em"),k=0;rn[s].forEach(function(x){if(x.r)k++;x.l=0});ENAUTO=true;renderAll();toast2(k?"All effects on this item set to max level":"Max level selected: the next effects you pick will be at max level")}});
  q("[data-el]",function(b){b.onclick=function(ev){var a=b.getAttribute("data-el").split("|"),s=a[0],it=getItem(cur[s]),x=rn[s][+a[1]],r=RI[x.r],M=runeMax(r,it.lv),d=+a[2];
   x.l=ev.shiftKey?(d>0?M:1):Math.max(1,Math.min(M,rLv(r,it,x)+d));if(x.l>=M)x.l=0;renderAll()}})}
 /* ---- hover preview (desktop, mouse only) ---- */
