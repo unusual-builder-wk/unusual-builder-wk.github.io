@@ -468,6 +468,19 @@ var TIPOK=window.matchMedia("(hover:hover) and (pointer:fine)");
 function tipCond(id){var c=COND[id],o=[];if(!c)return"";var mn=c.min||{};["ap","mp","wp","range"].forEach(function(k){if(c[k]&&mn[k]==null)mn[k]=c[k]});
  Object.keys(mn).forEach(function(k){o.push(sname(k).replace(/^%\s*/,"")+" ≥ "+mn[k])});Object.keys(c.max||{}).forEach(function(k){o.push(sname(k).replace(/^%\s*/,"")+" ≤ "+c.max[k])});
  return o.length?'<div style="color:#ff6b6b;font-size:12px;margin-top:6px">Condition: '+esc(o.join(", "))+'</div>':""}
+function nb(h){return String(h).replace(/([+\-\u2212]?\d[\d.,]*%?)\s+(?=[A-Za-z])/g,"$1&nbsp;")}
+function statGroups(stats,hl){var out=[],used={};
+ [["m","Mastery","elem","Elemental Mastery"],["r","Resistance","res","Elemental Resistance"]].forEach(function(g){
+  var ids=ELN.map(function(e){return g[0]+e}),by={};
+  stats.forEach(function(x,i){if(ids.indexOf(x.id)>=0){(by[x.v]=by[x.v]||[]).push(i)}});
+  Object.keys(by).forEach(function(v){var ix=by[v];if(ix.length<2)return;
+   var els=ix.map(function(i){return stats[i].id.slice(1)}),all=els.length===4;
+   ix.forEach(function(i){used[i]=1});
+   out.push({at:ix[0],hl:ix.some(function(i){return hl&&hl(stats[i].id)}),
+    h:all?(ICON[g[2]]||"")+esc(g[3])+" "+(+v>0?"+":"")+v:(ICON[g[2]]||"")+g[1]+" "+(+v>0?"+":"")+v+' <span style="white-space:nowrap">'+ELN.filter(function(e){return els.indexOf(e)>=0}).map(function(e){return ICON["m"+e]||e}).join("")+"</span>"})})});
+ stats.forEach(function(x,i){if(used[i])return;out.push({at:i,hl:hl&&hl(x.id),h:(ICON[x.id]||"")+esc(sname(x.id))+" "+(x.v>0?"+":"")+x.v})});
+ out.sort(function(a,b){return a.at-b.at});return out}
+function statsHtml(stats,hl){return statGroups(stats,hl).map(function(g){var t='<span style="white-space:nowrap">'+nb(g.h)+"</span>";return g.hl?'<b style="color:#9be35a">'+t+"</b>":t}).join(", ")}
 function tipStats(it){var m={};it.stats.forEach(function(x){m[x.id]=(m[x.id]||0)+x.v});return m}
 function tipRow(id,v,cmps){var h='<div class="tr"><span>'+(ICON[id]||"")+esc(sname(id))+'</span><b>'+(v>0?"+":"")+v+'</b>';
  cmps.forEach(function(c){var d=v-(c?(c[id]||0):0);h+='<span class="td" style="color:'+(!c?"#7f9aa6":d>0?"#6fd96f":d<0?"#ff6b6b":"#7f9aa6")+'">'+(!c?"":d>0?"▲ +"+d:d<0?"▼ "+d:"=")+'</span>'});return h+'</div>'}
@@ -480,7 +493,7 @@ function tipSub(id){var z=SI[id];if(!z)return"";var ri=subRarInfo(z),k=subKind(z
  var col=k==="epic"?"#ee6fc0":k==="relic"?"#b46bf0":ri[1],txt=ef(z),st=subTxt(z);
  return '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;border-left:4px solid '+col+';padding-left:8px">'+(ic?'<img src="'+ic+'" style="width:40px;height:40px;border-radius:6px">':'')+'<div><b style="font-size:15px">'+esc(z.n[LI])+'</b><div style="font-size:12px"><span style="color:'+col+'">'+gemC(col,14)+' '+kind+'</span>'+(k==="normal"&&ri[0]?' <span style="color:'+ri[1]+'">\u00b7 '+esc(ri[0])+'</span>':'')+'</div></div></div>'
   +(z.p&&z.p.length?'<div style="margin:2px 0 6px"><span class="mu" style="font-size:11px">SOCKETS </span>'+patChips(z.p)+'</div>':'')
-  +(st?'<div style="margin:2px 0">'+esc(st)+'</div>':'')+(txt?'<div style="font-size:12.5px;line-height:1.4;margin-top:4px">'+esc(txt)+cbBadge(txt)+'</div>':'')+(subMaxLv(z)?'<div class="mu" style="font-size:11.5px;margin-top:4px">Maximum level: '+subMaxLv(z)+'</div>':'')+'<div class="mu" style="font-size:10.5px;margin-top:6px;border-top:1px solid var(--line);padding-top:4px">ID: '+z.i+'</div>'}
+  +(st?'<div style="margin:2px 0">'+esc(st)+'</div>':'')+(txt?'<div style="font-size:12.5px;line-height:1.4;margin-top:4px">'+nb(esc(txt))+cbBadge(txt)+'</div>':'')+(subMaxLv(z)?'<div class="mu" style="font-size:11.5px;margin-top:4px">Maximum level: '+subMaxLv(z)+'</div>':'')+'<div class="mu" style="font-size:10.5px;margin-top:6px;border-top:1px solid var(--line);padding-top:4px">ID: '+z.i+'</div>'}
 function tipItem(id,slot,mode){var o=IDX[id],it=getItem(id);if(!o||!it)return"";var st=tipStats(it),h=tipHead(it,o,slot),cmpSlots=[],cmps=[],names=[];
  if(mode==="cmp"){cmpSlots=(slotType(slot)==="RING"?["RING1","RING2"]:[slot]);cmpSlots.forEach(function(s){var e=getItem(cur[s]);cmps.push(e?tipStats(e):null);names.push(e?e.name:"")})}
  var ids=Object.keys(st),lost=[];cmps.forEach(function(c){if(c)Object.keys(c).forEach(function(k){if(ids.indexOf(k)<0&&lost.indexOf(k)<0)lost.push(k)})});
@@ -590,7 +603,7 @@ function rShort(r){return sname(r.s).replace("Elemental Mastery","Elem").replace
 function renderRunes(){
  var h="",s=SEL;
  if(s){var it=getItem(cur[s]);if(it&&(it.sh||it.r===5||it.r===7)){var o=sb[s]||{};
-  var det="";[o.sp,o.sb].forEach(function(k){if(k&&SI[k]&&ef(SI[k]))det+='<div class="st" style="margin-top:6px">'+(ICO[k]?'<img src="'+ICO[k]+'" style="width:22px;height:22px;border-radius:4px;vertical-align:middle;margin-right:5px">':"")+esc(SI[k].n[LI])+': '+esc(subLvText(SI[k])||ef(SI[k]))+(subTxt(SI[k])?"":cbBadge(subLvText(SI[k])||ef(SI[k])))+(subTxt(SI[k])?'<div style="color:#9be35a">On sheet: '+esc(subTxt(SI[k]))+'</div>':'')+'</div>'});
+  var det="";[o.sp,o.sb].forEach(function(k){if(k&&SI[k]&&ef(SI[k]))det+='<div class="st" style="margin-top:6px">'+(ICO[k]?'<img src="'+ICO[k]+'" style="width:22px;height:22px;border-radius:4px;vertical-align:middle;margin-right:5px">':"")+esc(SI[k].n[LI])+': '+nb(esc(subLvText(SI[k])||ef(SI[k])))+(subTxt(SI[k])?"":cbBadge(subLvText(SI[k])||ef(SI[k])))+(subTxt(SI[k])?'<div style="color:#9be35a">On sheet: '+esc(subTxt(SI[k]))+'</div>':'')+'</div>'});
   h='<div class="bar" style="margin-top:12px"><button class="pri" id="go-ench">Enchant: runes and sublimations</button></div>'+det}}
  $("runes").innerHTML=h;
  if($("go-ench"))$("go-ench").onclick=function(){var s2=SEL;MODAL=false;renderSel();ENSEL={s:s2,i:null};showTab("ench");renderEnch()}
@@ -715,7 +728,7 @@ function eqList(){
  var pk=[q,P.rar,P.all,P.key].join("|");if(P.pk!==pk){P.pk=pk;P.lim=40}
  var tot=l.length,h=l.slice(0,P.lim).map(function(o){
   var it=getItem(String(o.i));
-  return '<button class="pick" style="border-left-color:'+RARS[o.r][1]+'" data-i="'+o.i+'">'+(ICO[String(o.i)]?'<img src="'+ICO[String(o.i)]+'" style="width:32px;height:32px;border-radius:5px;vertical-align:middle;margin-right:8px">':"")+esc(it.name)+' <span style="color:'+RARS[o.r][1]+'">'+RARN[o.r]+'</span> <span class="mu">Lv.'+o.l+'</span><div class="st">'+it.stats.map(function(x){return esc(sname(x.id))+' '+(x.v>0?'+':'')+x.v}).join(', ')+'</div></button>';
+  return '<button class="pick" style="border-left-color:'+RARS[o.r][1]+'" data-i="'+o.i+'">'+(ICO[String(o.i)]?'<img src="'+ICO[String(o.i)]+'" style="width:32px;height:32px;border-radius:5px;vertical-align:middle;margin-right:8px">':"")+esc(it.name)+' <span style="color:'+RARS[o.r][1]+'">'+RARN[o.r]+'</span> <span class="mu">Lv.'+o.l+'</span><div class="st">'+statsHtml(it.stats)+'</div></button>';
  }).join("");
  if(!tot)h='<p class="mu">No items found.</p>';
  if(tot>P.lim)h+='<p class="mu">Showing '+P.lim+' of '+tot+'</p><button class="pick" data-i="more" style="text-align:center;font-weight:700">Show '+Math.min(40,tot-P.lim)+' more · '+(tot-P.lim)+' left</button>';
@@ -754,7 +767,7 @@ function rmItem(s){delete cur[s];delete rn[s];delete sb[s];delete xe[s];MODAL=fa
 function renderSel(){var box=$("msel"),md=$("imodal");if(!box)return;var open=!!(MODAL&&SEL);md.classList.toggle("hide",!open);var rb=$("im-rm");if(rb){rb.classList.toggle("hide",!(open&&getItem(cur[SEL])));rb.onclick=function(){if(SEL)rmItem(SEL)}}if(!open){box.innerHTML="";return}
  var it=getItem(cur[SEL]),nm=N("slot",SEL);
  if(!it){box.innerHTML='<div class="item"><div><b>'+esc(nm)+'</b><div class="st">Empty slot</div></div><button class="pri" id="sel-ch" style="flex:none">Choose item</button></div>'}
- else{var ic=ICO[String(cur[SEL])];var st=it.stats.map(function(x){return (ICON[x.id]||"")+esc(sname(x.id))+" "+(x.v>0?"+":"")+x.v}).join(", ");
+ else{var ic=ICO[String(cur[SEL])];var st=statsHtml(it.stats);
   box.innerHTML='<div class="item" style="border-left:5px solid '+RARS[it.r][1]+';align-items:flex-start;gap:8px">'+(ic?'<img src="'+ic+'" style="width:52px;height:52px;border-radius:6px;flex:none">':"")+'<div style="min-width:0;flex:1"><div><b style="font-size:16px">'+esc(it.name)+'</b></div><div style="margin:4px 0;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center"><span>'+tyBadge(SEL,IDX[cur[SEL]],IDX[cur[SEL]]&&IDX[cur[SEL]].y,24)+'</span><span style="color:'+RARS[it.r][1]+'">'+gem(it.r,20)+' '+RARN[it.r]+'</span><span class="mu">Lv.'+it.lv+'</span></div><div class="st">'+st+'</div>'+xePicker(SEL,it)+itemEffHtml(cur[SEL])+'</div></div>'}
  Array.prototype.forEach.call(box.querySelectorAll("[data-xe]"),function(b){b.onclick=function(){var p=b.getAttribute("data-xe").split("|"),n=parseInt(p[1].charAt(2)),a=xeList(p[0],p[1]).slice();if(a.indexOf(p[2])<0){a.push(p[2]);while(a.length>n)a.shift()}(xe[p[0]]=xe[p[0]]||{})[p[1]]=a;renderAll()}});
 }
@@ -1256,7 +1269,7 @@ function renderItems(){isInit();if(IS.lvFor!==lv())setItemRange();refreshTypes()
   var tot=l.length;
  $("is-info").textContent=tot+" item"+(tot===1?"":"s")+(SS.length?" · sorted by "+SS.map(function(k){return sname(k).replace(/^%\s*/,"")}).join(" › ")+" (highest first)":"")+(tot>IS.lim?" · showing "+IS.lim:"");
  $("is-list").innerHTML=l.slice(0,IS.lim).map(function(o){var it=getItem(String(o.i));var ic=ICO[String(o.i)];
-  var st=it.stats.map(function(x){var t=(ICON[x.id]||"")+esc(sname(x.id))+" "+(x.v>0?"+":"")+x.v;return (SS.indexOf(x.id)>=0||fixedHit(o,x.id,SS))?'<b style="color:#9be35a">'+t+'</b>':t}).join(", ");
+  var st=statsHtml(it.stats,function(id){return SS.indexOf(id)>=0||fixedHit(o,id,SS)});
   return '<div class="item" data-hv="'+o.i+'" style="border-left:5px solid '+RARS[o.r][1]+';align-items:flex-start;gap:8px">'+(ic?'<img src="'+ic+'" style="width:40px;height:40px;border-radius:6px;flex:none">':"")+'<div style="min-width:0;flex:1"><div><b>'+esc(it.name)+'</b></div><div style="margin:2px 0"><span style="color:'+RARS[o.r][1]+'">'+gem(o.r,16)+' '+RARN[o.r]+'</span> <span class="mu">Lv.'+o.l+' · </span><span class="mu">'+tyBadge(o.p,o,o.y,18)+'</span></div><div class="st">'+st+'</div>'+itemEffHtml(o.i)+'</div><button data-eq="'+o.i+'" style="flex:none">Equip</button></div>'}).join("")||noItemsMsg();
  if(l.length>IS.lim)$("is-list").insertAdjacentHTML("beforeend",moreBtn("is-more",IS.lim,l.length));
  var mb=$("is-more");if(mb)mb.onclick=function(){IS.lim+=40;renderItems()};
