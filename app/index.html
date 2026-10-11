@@ -48,6 +48,25 @@ nav button.on,.bar button.on{background:var(--gold);color:#1a1405;border-color:v
 .xchg{position:relative;display:inline-flex;align-items:stretch;padding:0;margin:0 0 0 4px;border-radius:8px;border:1px solid #0008;overflow:hidden;vertical-align:middle;height:22px;background:none}
 .xchg span{display:flex;align-items:center;justify-content:center;width:30px;opacity:.95}.xchg span img{width:13px;height:13px}
 .xchg b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#000;font-size:12px;font-weight:800;text-shadow:0 0 3px #fff,0 0 3px #fff}
+.ec2{display:grid;grid-template-columns:minmax(0,1fr) 156px;grid-template-rows:auto 1fr;gap:4px 8px;height:146px;background:var(--inner);border:1px solid var(--line);border-left-width:5px;border-radius:8px;padding:6px 8px;margin-bottom:6px;overflow:hidden}
+.ec2 .ech{grid-column:1;grid-row:1;display:flex;align-items:center;gap:8px;min-width:0}
+.ec2 .ech img.ic{width:44px;height:44px;border-radius:8px;object-fit:cover;flex:none}
+.ec2 .nm{min-width:0;font-size:12px;line-height:1.2;color:var(--mu)}.ec2 .nm b{display:block;font-size:13.5px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ec2 .esk{grid-column:1;grid-row:2;align-self:end;display:flex;gap:3px;align-items:center;flex-wrap:nowrap}
+.ec2 .ecr{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-end;gap:3px;min-width:0}
+.ec2 .ect{font-weight:800;color:var(--gold);font-size:13px;height:17px;line-height:17px;white-space:nowrap}
+.ec2 .ecb{display:flex;gap:4px;justify-content:flex-end}.ec2 .ecb button{padding:4px;min-width:38px;height:38px;font-size:12px;margin:0}
+.ec2 .ecsub{width:100%;min-width:0;display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.ec2 .esub{flex-basis:auto;width:100%;display:flex;flex-direction:column;align-items:flex-end;gap:1px;padding:0;font-size:12px;min-width:0}
+.ec2 .esub .pcs{display:flex;transform:scale(.8);transform-origin:right center}
+.ec2 .esub .esn{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.ec2 .esub.bad .esn{color:#ff6b6b}
+.ec2.emp{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-style:dashed;border-left-width:1px;cursor:pointer;opacity:.75}
+.ec2.emp.dis{opacity:.35;cursor:default}
+.ec2.emp .eic img{width:44px;height:44px;opacity:.4}.ec2.emp .enm{font-size:12.5px;color:var(--mu)}
+.xr{flex:none;width:30px;height:30px;padding:0;margin:0;border-radius:50%;background:#e03131;border:2px solid #fff;color:#fff;font-size:13px;font-weight:800;line-height:1}
+#en-palw{display:none!important}
+@media (max-width:700px){.ec2{grid-template-columns:minmax(0,1fr) 140px}.ec2 .es{width:36px;height:36px}.ec2 .ecb button{min-width:34px}}
 .rmbtn{background:#d63a3a;border:1px solid #ff7b7b;color:#fff;font-weight:700;padding:4px 12px;border-radius:6px;margin-left:12px}.sx{position:absolute;left:-7px;top:-7px;width:20px;height:20px;border-radius:50%;background:#e03131;border:2px solid #fff;color:#fff;font-size:11px;font-weight:800;line-height:16px;text-align:center;z-index:3;cursor:pointer;padding:0}
 .sl{width:56px;height:56px;padding:0;background:var(--inner);border:2px solid #2d5568;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;position:relative}
 .sl .a{font-size:15px;font-weight:800}
@@ -413,16 +432,16 @@ function enSocket(s,it,i,x){
  return h+'<button class="en-ch" data-ee="'+s+'|'+i+'">Change</button><button class="en-ch" data-ex="'+s+'|'+i+'" style="color:var(--bad)">Remove</button></div>'}
 if(typeof DESK!=="undefined")try{DESK.addEventListener("change",function(){try{renderEnch()}catch(e){}})}catch(e){}
 var ENSEL=null,ENAUTO=true,ENLVL=10,ENSLOTS=["HEAD","NECK","CHEST","SHOULDERS","BACK","BELT","RING1","RING2","LEGS","FIRST_WEAPON","SECOND_WEAPON"];
-var ENDC={k:"",t:0},ENBK={};
+var ENDC={k:"",t:0,tm:0},ENBK={},ENPOP=false;
 function enToggle(s,i){var it=getItem(cur[s]);if(!it||!it.sh)return;var a=rnList(s,it),x=a[i],k=s+"|"+i,lk=slotLockedBy(s,i);
- if(x.r&&RI[x.r]){ENBK[k]={it:cur[s],r:x.r,c:x.c,l:x.l||0};x.r=null;x.l=0;if(!lk)x.c=0;ENSEL={s:s,i:i};renderAll();toast2("Effect removed \u00b7 double-click the socket again to bring it back")}
+ if(x.r&&RI[x.r]){ENBK[k]={it:cur[s],r:x.r,c:x.c,l:x.l||0};x.r=null;x.l=0;if(!lk)x.c=0;ENSEL={s:s,i:i};ENPOP=false;renderAll();toast2("Effect removed \u00b7 double-click the socket again to bring it back")}
  else if(ENBK[k]&&ENBK[k].it===cur[s]){var b=ENBK[k];if(lk&&lk&&x.c&&x.c!==b.c){toast("This socket color is required by "+lk.n[LI]+".");return}x.r=b.r;x.c=b.c;x.l=b.l;delete ENBK[k];ENSEL={s:s,i:i};renderAll();toast2("Effect restored")}
  else{ENSEL={s:s,i:i};renderEnch()}}
 function enApply(r){var E=ENSEL;if(!E){toast("Tap an item or one of its sockets first.");return}var s=E.s,it=getItem(cur[s]);if(!it||!it.sh)return;var a=rnList(s,it),i=E.i;
  if(i==null||i>=a.length){i=-1;a.forEach(function(x,k){if(i<0&&!x.r&&(!x.c||x.c===r.c))i=k});if(i<0)a.forEach(function(x,k){if(i<0&&(!x.c||x.c===r.c))i=k});if(i<0){toast("This item has no "+RCOL[r.c][2].toLowerCase()+" or free socket.");return}}
  var cx=a[i];if(cx.c&&cx.c!==r.c){toast("Socket "+(i+1)+" is "+RCOL[cx.c][2].toLowerCase()+": it takes only "+RCOL[cx.c][2].toLowerCase()+" effects.");return}
- if(!cx.c)cx.c=r.c;cx.r=r.i;var M=runeMax(r,it.lv);cx.l=ENAUTO?0:(ENLVL>=M?0:ENLVL);
- var nx=-1;a.forEach(function(x,k){if(nx<0&&k!==i&&!x.r&&(!x.c||x.c===r.c||true))nx=k});ENSEL={s:s,i:nx>=0?nx:i};renderAll()}
+ var was=cx.r;if(!cx.c)cx.c=r.c;cx.r=r.i;var M=runeMax(r,it.lv);cx.l=ENAUTO?0:(ENLVL>=M?0:ENLVL);
+ var nx=-1;a.forEach(function(x,k){if(nx<0&&k!==i&&!x.r&&(!x.c||x.c===r.c||true))nx=k});if(was||nx<0){ENPOP=false;ENSEL={s:s,i:i}}else ENSEL={s:s,i:nx};renderAll()}
 function enPalHtml(it0){var pal="";
  [1,2,3].forEach(function(c){pal+='<div class="pc">'+RUNES.filter(function(r){return r.c===c}).sort(function(a,b){return a.n[LI]<b.n[LI]?-1:1}).map(function(r){
   var dbl=it0&&r.m&&r.d.indexOf(ENSEL.s.replace(/\d$/,""))>=0,val=it0?runeVal(r,ENAUTO?runeMax(r,it0.lv):Math.min(ENLVL,runeMax(r,it0.lv)),ENSEL.s):"",
@@ -431,49 +450,49 @@ function enPalHtml(it0){var pal="";
  return pal}
 function enPalWire(root){Array.prototype.forEach.call(root.querySelectorAll("[data-pr]"),function(b){b.onclick=function(){enApply(RI[b.getAttribute("data-pr")])}})}
 function renderEnch(){
- if(CURTAB!=="ench"||!$("en-list"))return;
+ if(CURTAB!=="ench"||!$("en-list")){var pp0=$("enpop");if(pp0)pp0.remove();ENPOP=false;return}
  var h="",tot=0,rec={},n=0,cs=ENSEL&&getItem(cur[ENSEL.s])?ENSEL.s:null;if(!cs)ENSEL=null;
  ENSLOTS.forEach(function(s){
-  var it=getItem(cur[s]);if(!it||(!it.sh&&it.r!==5&&it.r!==7))return;n++;
+  var it=getItem(cur[s]);
+  if(!it){var dis=(s==="SECOND_WEAPON"&&twoH()),si=slotIcon(s);h+='<div class="ec2 emp'+(dis?' dis':'')+'" data-gc="'+s+'" title="'+esc(N("slot",s))+'"><div class="eic">'+(si?'<img src="'+si+'" alt="">':"")+'</div><div class="enm">'+esc(N("slot",s))+'</div></div>';return}
+  n++;
   var a=it.sh?rnList(s,it):[],o=sb[s]||{},ic=ICO[String(cur[s])],tt=enItemTotal(s,it);tot+=tt;
   a.forEach(function(x){if(x.r&&RI[x.r]){var r=RI[x.r];rec[r.s]=(rec[r.s]||0)+runeVal(r,rLv(r,it,x),s)}});
-  var on=ENSEL&&ENSEL.s===s;
-  h+='<div class="er'+(on?' on':'')+'" style="border-left-color:'+RARS[it.r][1]+'">'+(ic?'<img class="ic" src="'+ic+'" data-esel="'+s+'" alt="">':'')+'<div class="nm" data-esel="'+s+'"><b>'+esc(it.name)+'</b>'+esc(N("slot",s))+' · Lv.'+it.lv+'</div><span class="br"></span>';
-  a.forEach(function(x,i){var r=x.r?RI[x.r]:null,sel=on&&ENSEL.i===i;h+='<button class="es'+(sel?' on':'')+'" data-es="'+s+'|'+i+'" title="'+(r?esc(r.n[LI])+' +'+runeVal(r,rLv(r,it,x),s):'Empty socket · '+RCOL[x.c][2])+'">'+sockImg(x.c,38,r?r.s:null,!!r)+'</button>'});
-  h+='<div class="ers">';
-  if(it.r===5||it.r===7)h+='<button '+(o.sp&&SI[o.sp]?'data-hsub="'+o.sp+'" ':'')+'data-gs="'+s+'|sp" title="'+(o.sp&&SI[o.sp]?esc(SI[o.sp].n[LI]):(it.r===5?"Relic":"Epic")+' sublimation')+'" style="color:'+(it.r===5?"#b46bf0":"#ee6fc0")+'">'+(o.sp&&SI[o.sp]&&ICO[o.sp]?'<img src="'+ICO[o.sp]+'" style="width:26px;height:26px;border-radius:4px;display:block">':'★')+'</button>';
+  h+='<div class="ec2" style="border-left-color:'+RARS[it.r][1]+'"><div class="ech">'+(ic?'<img class="ic" src="'+ic+'" alt="">':'')+'<div class="nm"><b>'+esc(it.name)+'</b>'+esc(N("slot",s))+' \u00b7 Lv.'+it.lv+'</div></div><div class="esk">';
+  a.forEach(function(x,i){var r=x.r?RI[x.r]:null,sel=ENPOP&&ENSEL&&ENSEL.s===s&&ENSEL.i===i;h+='<button class="es'+(sel?' on':'')+'" data-es="'+s+'|'+i+'" title="'+(r?esc(r.n[LI])+' +'+runeVal(r,rLv(r,it,x),s):'Empty socket \u00b7 tap to choose an effect')+'">'+sockImg(x.c,36,r?r.s:null,!!r)+'</button>'});
+  if(!a.length)h+='<span class="mu" style="font-size:12px">No enchantment sockets</span>';
+  h+='</div><div class="ecr"><div class="ect">'+(a.length?tt+' shards':'')+'</div><div class="ecb">';
+  if(it.r===5||it.r===7)h+='<button '+(o.sp&&SI[o.sp]?'data-hsub="'+o.sp+'" ':'')+'data-gs="'+s+'|sp" title="'+(o.sp&&SI[o.sp]?esc(SI[o.sp].n[LI]):(it.r===5?"Relic":"Epic")+' sublimation')+'" style="color:'+(it.r===5?"#b46bf0":"#ee6fc0")+'">'+(o.sp&&SI[o.sp]&&ICO[o.sp]?'<img src="'+ICO[o.sp]+'" style="width:26px;height:26px;border-radius:4px;display:block">':'\u2605')+'</button>';
   if(it.sh)h+='<button '+(o.sb&&SI[o.sb]?'data-hsub="'+o.sb+'" ':'')+'data-gs="'+s+'|sb" title="'+(o.sb&&SI[o.sb]?esc(SI[o.sb].n[LI]):'Sublimation Scroll')+'">'+scrollImg(24,o.sb&&SI[o.sb]?1:.45,o.sb&&SI[o.sb]?"#d9b25c":"")+'</button>';
-  if(a.length)h+='<button data-ca="'+s+'" title="Clear this item\'s runes" style="color:var(--bad)">✕</button>';
-  h+='</div>';
+  if(a.length)h+='<button data-ca="'+s+'" title="Clear this item\'s runes" style="color:var(--bad)">\u2715</button>';
+  h+='</div><div class="ecsub">';
   [["sb",o.sb],["sp",o.sp]].forEach(function(p){var z=p[1]&&SI[p[1]]?SI[p[1]]:null;if(!z)return;
-   var ok=p[0]==="sp"||z.p.every(function(c,k){return a[k]&&a[k].c===c}),tx=subLvText(z)||ef(z);
-   h+='<div class="esub'+(ok?'':' bad')+'" data-hsub="'+z.i+'">'+(p[0]==="sb"?patChips(z.p):'')+'<b class="esn" data-gs="'+s+'|'+p[0]+'" title="Open in the sublimation list" style="cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px">'+esc(z.n[LI])+'</b>'+(ok?'':'<span class="cnm">Condition not met</span>')+'</div>'});
-  if(on){var i=ENSEL.i,x=i!=null?a[i]:null,r=x&&x.r?RI[x.r]:null;
-   h+='<div class="ed">';
-   if(x){h+='<span><b>Socket '+(i+1)+'</b> '+sockImg(x.c,16,null,false)+'</span>';
-    if(r){var M=runeMax(r,it.lv),L=rLv(r,it,x),dbl=r.m&&r.d.indexOf(s.replace(/\d$/,""))>=0;
-     h+='<span style="color:'+RCOL[r.c][0]+'">'+(ICON[r.s]||"")+' '+esc(r.n[LI])+' <b>+'+runeVal(r,L,s)+'</b>'+(dbl?'<span class="x2">×2</span>':'')+'</span><span class="en-lv"><button data-el="'+s+'|'+i+'|-1">−</button> Lv. '+L+' / '+M+' <button data-el="'+s+'|'+i+'|1">+</button></span><span class="mu">'+enCost(L)+' shards</span><button data-ex="'+s+'|'+i+'" style="color:var(--bad)">Remove</button>'}
-    else h+='<span class="mu">Empty · '+(DESK.matches?'pick an effect on the right':'tap to choose an effect')+'</span>';
-    h+='<button data-ec="'+s+'|'+i+'">Socket color</button>'}
-   else h+='<span class="mu">'+(DESK.matches?'Pick a colored effect on the right: it goes in the first free socket.':'Pick a colored effect below: it goes in the first free socket.')+'</span>';
-   if(a.length)h+='<button data-em="'+s+'">Max levels</button><span class="en-tot" style="font-size:13px;margin-left:auto">'+tt+' shards</span>';
-   h+='</div>';if(!DESK.matches)h+='<div class="mpal" id="mpal">'+enPalHtml(it)+'</div>'}
-  h+='</div>'});
- if(!n)h='<div class="mu">Equip items in Build (Items tab): they appear here so you can enchant them one by one.</div>';
+   var ok=p[0]==="sp"||z.p.every(function(c,k){return a[k]&&a[k].c===c});
+   h+='<div class="esub'+(ok?'':' bad')+'" data-hsub="'+z.i+'">'+(p[0]==="sb"&&z.p.length?'<span class="pcs">'+patChips(z.p)+'</span>':'')+'<b class="esn" data-gs="'+s+'|'+p[0]+'" title="'+(ok?'Open in the sublimation list':'Condition not met \u00b7 open in the sublimation list')+'">'+(ok?'':'\u26a0 ')+esc(z.n[LI])+'</b></div>'});
+  h+='</div></div></div>'});
  var rc=Object.keys(rec).map(function(k){return'<span>'+(ICON[k]||"")+' '+esc(sname(k).replace(/^%\s*/,""))+' <b>+'+rec[k]+'</b></span>'}).join("");
  $("en-top").innerHTML='<div class="en-top"><span class="en-tot">Total: '+tot+' shards</span><span class="mu">cost of all effects</span><button id="en-ae" style="margin-left:auto;border-color:var(--gold);color:var(--gold)">\u2728 Auto-enchant</button></div><div class="en-lvl"><label><input type="checkbox" id="en-auto" style="width:auto;margin:0 6px 0 0"'+(ENAUTO?' checked':'')+'>Auto (max level)</label><input type="range" id="en-lvl" min="1" max="11" value="'+ENLVL+'"'+(ENAUTO?' disabled':'')+'><b id="en-lvv">'+(ENAUTO?'':'Lv. '+ENLVL)+'</b><span class="mu">level given to the next effect you pick</span></div>'+(rc?'<div class="en-rec">'+rc+'</div>':'');
  $("en-list").innerHTML=h;
  $("en-auto").onchange=function(){ENAUTO=this.checked;renderEnch()};$("en-lvl").oninput=function(){ENLVL=+this.value;$("en-lvv").textContent="Lv. "+ENLVL};
- // palette
- var it0=ENSEL?getItem(cur[ENSEL.s]):null;
- if($("en-pal")){$("en-pal").innerHTML=enPalHtml(it0);$("en-palt").textContent=it0?it0.name:"select an item";enPalWire($("en-pal"))}
- if($("mpal"))enPalWire($("mpal"));
  var q=function(sel,fn){Array.prototype.forEach.call($("en-list").querySelectorAll(sel),fn)};
- q("[data-esel]",function(b){b.onclick=function(){var s=b.getAttribute("data-esel");ENSEL=(ENSEL&&ENSEL.s===s&&ENSEL.i==null)?null:{s:s,i:null};renderEnch()}});
+ q("[data-gc]",function(b){b.onclick=function(){var s=b.getAttribute("data-gc");if(b.classList.contains("dis"))return;goChange(s)}});
  q("[data-es]",function(b){b.onclick=function(){var a=b.getAttribute("data-es").split("|"),s=a[0],i=+a[1],k=s+"|"+i,now=Date.now();
-  if(ENDC.k===k&&now-ENDC.t<450){ENDC={k:"",t:0};enToggle(s,i);return}
-  ENDC={k:k,t:now};ENSEL={s:s,i:i};renderEnch()}});
- q("[data-ec]",function(b){b.onclick=function(){var a=b.getAttribute("data-ec").split("|");pickSlotColor(a[0],+a[1])}});
+  if(ENDC.k===k&&now-ENDC.t<300){clearTimeout(ENDC.tm);ENDC={k:"",t:0,tm:0};enToggle(s,i);return}
+  clearTimeout(ENDC.tm);ENDC={k:k,t:now,tm:setTimeout(function(){ENDC={k:"",t:0,tm:0};ENSEL={s:s,i:i};ENPOP=true;renderEnch()},300)}}});
+ enWire($("en-list"));enPopRender()}
+function enPopRender(){var old=$("enpop"),s=ENSEL&&ENSEL.s,it=s?getItem(cur[s]):null;
+ if(!ENPOP||!it||!it.sh||ENSEL.i==null||ENSEL.i>=it.sh){ENPOP=false;if(old)old.remove();return}
+ var a=rnList(s,it),i=ENSEL.i,x=a[i],r=x.r?RI[x.r]:null;
+ var h='<div class="mhd"><b style="color:var(--cy);display:flex;align-items:center;gap:8px;min-width:0">'+sockImg(x.c,26,r?r.s:null,!!r)+'<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Socket '+(i+1)+' \u00b7 '+esc(it.name)+'</span></b><button class="xr" id="enp-x" title="Close">\u2715</button></div>';
+ if(r){var M=runeMax(r,it.lv),L=rLv(r,it,x),dbl=r.m&&r.d.indexOf(s.replace(/\d$/,""))>=0;
+  h+='<div class="ed" style="border-top:0"><span style="color:'+RCOL[r.c][0]+'">'+(ICON[r.s]||"")+' '+esc(r.n[LI])+' <b>+'+runeVal(r,L,s)+'</b>'+(dbl?'<span class="x2">\u00d72</span>':'')+'</span><span class="en-lv"><button data-el="'+s+'|'+i+'|-1">\u2212</button> Lv. '+L+' / '+M+' <button data-el="'+s+'|'+i+'|1">+</button></span><span class="mu">'+enCost(L)+' shards</span><button data-ex="'+s+'|'+i+'" style="color:var(--bad)">Remove</button></div>'}
+ else h+='<div class="mu" style="margin:2px 0 6px">Empty \u00b7 choose an effect below</div>';
+ h+='<div class="ed" style="border-top:0;padding:0 0 8px"><button data-em="'+s+'">Max levels</button><span class="en-tot" style="font-size:13px;margin-left:auto">'+enItemTotal(s,it)+' shards</span></div><div class="mpal" id="mpal">'+enPalHtml(it)+'</div>';
+ var box=old;if(!box){box=document.createElement("div");box.id="enpop";box.className="modal";box.innerHTML='<div class="mbox" id="enpb"></div>';document.body.appendChild(box);box.onclick=function(e){if(e.target===box){ENPOP=false;box.remove();renderEnch()}}}
+ var pb=$("enpb"),sc=pb.scrollTop;pb.innerHTML=h;pb.scrollTop=sc;
+ $("enp-x").onclick=function(){ENPOP=false;box.remove();renderEnch()};
+ enWire(pb);enPalWire(pb)}
+function enWire(root){var q=function(sel,fn){Array.prototype.forEach.call(root.querySelectorAll(sel),fn)};
  q("[data-ex]",function(b){b.onclick=function(){var a=b.getAttribute("data-ex").split("|"),x=rn[a[0]][+a[1]];x.r=null;x.l=0;renderAll()}});
  q("[data-ca]",function(b){b.onclick=function(){var s=b.getAttribute("data-ca");(rn[s]||[]).forEach(function(x){x.r=null;x.l=0});renderAll()}});
  q("[data-gs]",function(b){b.onclick=function(){var a=b.getAttribute("data-gs").split("|");goSub(a[0],a[1])}});
