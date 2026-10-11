@@ -34,12 +34,15 @@ nav{display:flex;gap:18px;margin-left:auto;align-items:center;flex-wrap:wrap}
 nav a.l{color:var(--muted);text-decoration:none;font-weight:500;font-size:.95rem}
 nav a.l:hover{color:var(--fg)}
 .lang{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.lang button{all:unset;cursor:pointer;padding:6px 10px;font:600 .8rem/1 var(--body);color:var(--muted)}
+.lang button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;font:600 .8rem/1 var(--body);color:var(--muted)}
 .lang button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
 .lang button:focus-visible,a:focus-visible,.btn:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
 
 .hero{position:relative;display:grid;grid-template-columns:1.25fr .75fr;gap:32px;align-items:center;padding-block:clamp(40px,8vw,88px);overflow:hidden}
-.hero h1{font-size:clamp(2.3rem,6.4vw,4.2rem);font-weight:800;margin:14px 0 18px}
+.ttl{font:800 clamp(1.05rem,2.8vw,1.55rem)/1.15 var(--display);color:var(--fg);letter-spacing:-.01em;text-wrap:balance}
+.hero h1{font-size:clamp(1.75rem,6.4vw,3.9rem);font-weight:800;margin:10px 0 18px;text-transform:uppercase;line-height:1.02}
+.hero h1 .t0,.hero h1 .t1,.hero h1 .t2,.hero h1 .t3{-webkit-text-stroke:4px #0a1617;paint-order:stroke fill;stroke-linejoin:round}
+.hero h1 .t0{color:#4ec96a}.hero h1 .t1{color:#f0a030}.hero h1 .t2{color:#f5d142}.hero h1 .t3{color:#b46bf0}
 .hero h1 em{font-style:normal;color:var(--accent)}
 .hero p.lead{font-size:1.15rem;color:var(--muted);max-width:34em}
 .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
@@ -112,6 +115,14 @@ footer{border-top:1px solid var(--line);padding-block:28px 36px;color:var(--mute
 .fpic svg{height:124px;width:auto;max-width:100%;filter:drop-shadow(0 4px 6px rgba(7,60,60,.18))}
 .feat div{padding-top:10px}
 @media (max-width:760px){.fpic,.fpic svg{height:116px}}
+
+.fl{width:20px;height:13px;border-radius:2px;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.18)}
+.env{width:46px;height:46px;flex:none;overflow:visible}
+.env-f{transform-box:fill-box;transform-origin:50% 0;animation:envf 3.6s ease-in-out infinite}
+.env-l{animation:envl 3.6s ease-in-out infinite}
+@keyframes envf{0%,12%{transform:scaleY(1)}30%,66%{transform:scaleY(-1)}84%,100%{transform:scaleY(1)}}
+@keyframes envl{0%,22%{transform:translateY(0)}42%,62%{transform:translateY(-13px)}80%,100%{transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){.env-f,.env-l{animation:none}}
 </style>
 
 <div class="wrap">
@@ -122,7 +133,7 @@ footer{border-top:1px solid var(--line);padding-block:28px 36px;color:var(--mute
     <a class="l" href="#features" data-i18n="nav_feat"></a>
     <a class="l" href="#contact" data-i18n="nav_contact"></a>
     <div class="lang" role="group" aria-label="Language">
-      <button data-lang="en" aria-pressed="true">EN</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button>
+      <button data-lang="en" aria-pressed="true"><svg class="fl" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#012169"/><path d="M0 0L60 40M60 0L0 40" stroke="#fff" stroke-width="8"/><path d="M0 0L60 40M60 0L0 40" stroke="#C8102E" stroke-width="3"/><path d="M30 0V40M0 20H60" stroke="#fff" stroke-width="12"/><path d="M30 0V40M0 20H60" stroke="#C8102E" stroke-width="7"/></svg>EN</button><button data-lang="fr" aria-pressed="false"><svg class="fl" viewBox="0 0 60 40" aria-hidden="true"><rect width="20" height="40" fill="#0055A4"/><rect x="20" width="20" height="40" fill="#fff"/><rect x="40" width="20" height="40" fill="#EF4135"/></svg>FR</button><button data-lang="es" aria-pressed="false"><svg class="fl" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#AA151B"/><rect y="10" width="60" height="20" fill="#F1BF00"/></svg>ES</button><button data-lang="pt" aria-pressed="false"><svg class="fl" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#EF4135" /><rect width="24" height="40" fill="#006600"/><circle cx="24" cy="20" r="8" fill="#FFCC00"/><circle cx="24" cy="20" r="4.6" fill="#fff" stroke="#EF4135" stroke-width="1.6"/></svg>PT</button>
     </div>
   </nav>
 </div></header>
@@ -130,7 +141,7 @@ footer{border-top:1px solid var(--line);padding-block:28px 36px;color:var(--mute
 <main id="top">
 <div class="hero"><svg class="gr g1" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg><svg class="gr g2" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg><svg class="gr g3" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg><svg class="gr g4" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg><svg class="gr g5" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg><svg class="gr g6" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg>
     <div style="position:relative">
-    <span class="eyebrow" data-i18n="tag"></span>
+    <div class="ttl" data-i18n="tag"></div>
     <h1 data-i18n-html="h1"></h1>
     <p class="lead" data-i18n="lead"></p>
     <div class="cta">
@@ -282,7 +293,12 @@ footer{border-top:1px solid var(--line);padding-block:28px 36px;color:var(--mute
   <span class="eyebrow" data-i18n="contact_eye"></span>
   <h2 data-i18n="contact_h"></h2>
   <p style="margin-top:10px;color:var(--muted);max-width:36em" data-i18n="contact_p"></p>
-  <div class="mail">
+  <div class="mail"><svg class="env" viewBox="0 -10 52 52" aria-hidden="true">
+<rect x="3" y="12" width="46" height="28" rx="4" fill="var(--accent)"/>
+<g class="env-l"><rect x="10" y="14" width="32" height="22" rx="2" fill="#fff" stroke="var(--accent2)" stroke-width="1.2"/><path d="M15 21h22M15 26h22M15 31h14" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round"/></g>
+<path d="M3 16L26 33L49 16V36Q49 40 45 40H7Q3 40 3 36Z" fill="var(--accent2)"/>
+<path class="env-f" d="M3 12L26 30L49 12Z" fill="var(--accent)" stroke="var(--on-accent)" stroke-opacity=".35" stroke-width="1" stroke-linejoin="round"/>
+</svg>
     <code id="mailtxt">unusualbuilderapp@gmail.com</code>
     <button class="btn sec" id="copy" type="button" data-i18n="copy"></button>
   </div>
@@ -305,8 +321,8 @@ footer{border-top:1px solid var(--line);padding-block:28px 36px;color:var(--mute
 var T={
 en:{
 nav_why:"Our story",nav_feat:"Features",nav_contact:"Contact",
-tag:"A Wakfu build planner, made by players",
-h1:"Plan your Wakfu build the way the <em>game counts it.</em>",
+tag:"A Wakfu builder by Unusual Italians",
+h1:"Create your build<br><em class=\"t0\">intuitive,</em> <em class=\"t1\">easy,</em> <em class=\"t2\">fast</em> <em class=\"t3\">and perfect!</em>",
 lead:"Unusual Builder is a free, unofficial build planner for Wakfu. Pick a class, equip items, runes and sublimations, choose your spells and passives, and watch your stats update as you go.",
 open:"Open the builder",story_btn:"Our story",free_note:"Free to use. No account needed. Works on your phone.",
 s1h:"True to the game",s1p:"Items, rarities, levels and stats follow the game data, and item requirements are checked by experienced players.",
@@ -337,8 +353,8 @@ priv_p:"Unusual Builder does not ask you to create an account. Your builds, pres
 foot1:"Free fan project",foot2:"Wakfu is an MMORPG published by Ankama. Unusual Builder is an unofficial fan project with no link to Ankama. Game images are the property of Ankama Games and/or their respective authors and may not be used for commercial purposes."},
 fr:{
 nav_why:"Notre histoire",nav_feat:"Fonctions",nav_contact:"Contact",
-tag:"Un planificateur de build Wakfu, fait par des joueurs",
-h1:"Planifiez votre build Wakfu <em>comme le jeu le calcule.</em>",
+tag:"Un Wakfu builder par Unusual Italians",
+h1:"Créez votre build<br><em class=\"t0\">intuitif,</em> <em class=\"t1\">facile,</em> <em class=\"t2\">rapide</em> <em class=\"t3\">et parfait !</em>",
 lead:"Unusual Builder est un planificateur de build gratuit et non officiel pour Wakfu. Choisissez une classe, équipez objets, runes et sublimations, sélectionnez sorts et passifs, et regardez vos stats se mettre à jour en direct.",
 open:"Ouvrir le builder",story_btn:"Notre histoire",free_note:"Gratuit. Sans compte. Fonctionne sur téléphone.",
 s1h:"Fidèle au jeu",s1p:"Objets, raretés, niveaux et stats suivent les données du jeu, et les conditions des objets sont vérifiées par des joueurs expérimentés.",
@@ -369,8 +385,8 @@ priv_p:"Unusual Builder ne demande pas de créer un compte. Vos builds, presets 
 foot1:"Projet de fans gratuit",foot2:"WAKFU est un MMORPG édité par Ankama. Unusual Builder est un projet de fans non officiel, sans aucun lien avec Ankama. Les images du jeu sont la propriété d'Ankama Games et/ou de leurs auteurs respectifs et ne peuvent pas être utilisées à des fins commerciales."},
 es:{
 nav_why:"Nuestra historia",nav_feat:"Funciones",nav_contact:"Contacto",
-tag:"Un planificador de builds de Wakfu, hecho por jugadores",
-h1:"Planifica tu build de Wakfu <em>como lo cuenta el juego.</em>",
+tag:"Un Wakfu builder por Unusual Italians",
+h1:"¡Crea tu build<br><em class=\"t0\">intuitiva,</em> <em class=\"t1\">fácil,</em> <em class=\"t2\">rápida</em> <em class=\"t3\">y perfecta!</em>",
 lead:"Unusual Builder es un planificador de builds gratuito y no oficial para Wakfu. Elige una clase, equipa objetos, runas y sublimaciones, escoge hechizos y pasivas, y mira cómo se actualizan tus estadísticas al instante.",
 open:"Abrir el builder",story_btn:"Nuestra historia",free_note:"Gratis. Sin cuenta. Funciona en el móvil.",
 s1h:"Fiel al juego",s1p:"Objetos, rarezas, niveles y estadísticas siguen los datos del juego, y los requisitos de los objetos los revisan jugadores con experiencia.",
@@ -401,8 +417,8 @@ priv_p:"Unusual Builder no te pide crear una cuenta. Tus builds, presets y ajust
 foot1:"Proyecto de fans gratuito",foot2:"Wakfu es un MMORPG editado por Ankama. Unusual Builder es un proyecto de fans no oficial, sin ningún vínculo con Ankama. Las imágenes del juego son propiedad de Ankama Games y/o de sus respectivos autores y no pueden usarse con fines comerciales."},
 pt:{
 nav_why:"Nossa história",nav_feat:"Funções",nav_contact:"Contato",
-tag:"Um planejador de builds de Wakfu, feito por jogadores",
-h1:"Planeje sua build de Wakfu <em>como o jogo conta.</em>",
+tag:"Um Wakfu builder por Unusual Italians",
+h1:"Crie sua build<br><em class=\"t0\">intuitiva,</em> <em class=\"t1\">fácil,</em> <em class=\"t2\">rápida</em> <em class=\"t3\">e perfeita!</em>",
 lead:"Unusual Builder é um planejador de builds gratuito e não oficial para Wakfu. Escolha uma classe, equipe itens, runas e sublimações, selecione feitiços e passivas, e veja seus atributos atualizarem na hora.",
 open:"Abrir o builder",story_btn:"Nossa história",free_note:"Grátis. Sem conta. Funciona no celular.",
 s1h:"Fiel ao jogo",s1p:"Itens, raridades, níveis e atributos seguem os dados do jogo, e os requisitos dos itens são conferidos por jogadores experientes.",
