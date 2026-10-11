@@ -123,6 +123,22 @@ footer{border-top:1px solid var(--line);padding-block:28px 36px;color:var(--mute
 @keyframes envf{0%,12%{transform:scaleY(1)}30%,66%{transform:scaleY(-1)}84%,100%{transform:scaleY(1)}}
 @keyframes envl{0%,22%{transform:translateY(0)}42%,62%{transform:translateY(-13px)}80%,100%{transform:translateY(0)}}
 @media (prefers-reduced-motion:reduce){.env-f,.env-l{animation:none}}
+
+.gbadge{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.gbadge p{margin:0;font:600 1rem/1.3 var(--body);color:var(--fg)}
+.gbadge .gb1 b{font:800 1.05rem/1.3 var(--display);color:var(--accent)}
+.gbadge .gb2{display:flex;align-items:center;gap:10px;font:800 1.05rem/1.2 var(--display);color:#d63a3a}
+.fl2{width:36px;height:24px;border-radius:3px;flex:none}
+#why{position:relative;overflow:hidden}
+#why>*:not(.gr){position:relative;z-index:1}
+#why .w1{width:150px;right:-40px;top:20px;opacity:.16;animation:gspin 60s linear infinite}
+#why .w2{width:80px;right:100px;top:6px;opacity:.24;animation:gspin 34s linear infinite reverse}
+#why .w3{width:44px;right:60px;top:110px;opacity:.34;animation:gspin 20s linear infinite}
+#why .w4{width:130px;left:-36px;bottom:-34px;opacity:.14;animation:gspin 52s linear infinite reverse}
+#why .w5{width:70px;left:76px;bottom:-10px;opacity:.22;animation:gspin 28s linear infinite}
+#why .w6{width:38px;left:46px;bottom:40px;opacity:.32;animation:gspin 16s linear infinite reverse}
+#contact .gr{animation:gspin 40s linear infinite}
+@media (prefers-reduced-motion:reduce){#why .gr,#contact .gr{animation:none}}
 </style>
 
 <div class="wrap">
@@ -268,10 +284,14 @@ footer{border-top:1px solid var(--line);padding-block:28px 36px;color:var(--mute
   </div>
 </section>
 
-<section id="why">
+<section id="why"><svg class="gr w1" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg><svg class="gr w2" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg><svg class="gr w3" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg><svg class="gr w4" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg><svg class="gr w5" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg><svg class="gr w6" viewBox="31.8 35.8 35.5 30.2" aria-hidden="true"><path d="M51.1 44.0L53.7 44.7L53.7 49.3L51.1 50.0L50.8 50.6L52.3 53.0L49.0 56.3L46.6 54.8L46.0 55.1L45.3 57.7L40.7 57.7L40.0 55.1L39.4 54.8L37.0 56.3L33.7 53.0L35.2 50.6L34.9 50.0L32.3 49.3L32.3 44.7L34.9 44.0L35.2 43.4L33.7 41.0L37.0 37.7L39.4 39.2L40.0 38.9L40.7 36.3L45.3 36.3L46.0 38.9L46.6 39.2L49.0 37.7L52.3 41.0L50.8 43.4ZM47 47A4 4 0 1 0 39 47A4 4 0 1 0 47 47ZM64.9 55.7L66.8 56.2L66.8 59.8L64.9 60.3L64.6 60.8L65.5 62.6L62.6 64.8L61.1 63.6L60.5 63.8L59.6 65.5L56.1 64.7L56.1 62.7L55.6 62.4L53.7 62.8L52.2 59.5L53.7 58.3L53.7 57.7L52.2 56.5L53.7 53.2L55.6 53.6L56.1 53.3L56.1 51.3L59.6 50.5L60.5 52.2L61.1 52.4L62.6 51.2L65.5 53.4L64.6 55.2ZM62.3 58A2.8 2.8 0 1 0 56.7 58A2.8 2.8 0 1 0 62.3 58Z" fill="currentColor" fill-rule="evenodd"/></svg>
   <span class="eyebrow" data-i18n="story_eye"></span>
   <div class="prose">
-    <h2 data-i18n="story_h"></h2>
+    <div class="ph"><h2 data-i18n="story_h"></h2><div class="gbadge"><p class="gb1"><b data-i18n="gl1"></b> <span data-i18n="gl2"></span></p><p class="gb2"><span data-i18n="gl3"></span><svg class="fl2" viewBox="0 0 60 40" aria-hidden="true"><defs><clipPath id="c1"><rect width="20" height="40"/></clipPath><clipPath id="c2"><rect x="20" width="20" height="40"/></clipPath><clipPath id="c3"><rect x="40" width="20" height="40"/></clipPath></defs>
+<g clip-path="url(#c1)"><rect width="20" height="40" fill="#fff"/><path d="M0 3H20M0 9H20M0 15H20M0 21H20M0 27H20M0 33H20M0 39H20" stroke="#B22234" stroke-width="3.4"/><rect width="11" height="22" fill="#3C3B6E"/><g fill="#fff"><circle cx="3" cy="4" r="1"/><circle cx="8" cy="4" r="1"/><circle cx="5.5" cy="9" r="1"/><circle cx="3" cy="14" r="1"/><circle cx="8" cy="14" r="1"/><circle cx="5.5" cy="19" r="1"/></g></g>
+<g clip-path="url(#c2)"><rect x="20" width="20" height="40" fill="#DE2910"/><path d="M26 7l1.6 4.9h5.1l-4.1 3 1.6 4.9-4.2-3-4.2 3 1.6-4.9-4.1-3h5.1z" fill="#FFDE00" transform="translate(4 3) scale(.85)"/></g>
+<g clip-path="url(#c3)"><rect x="40" width="20" height="40" fill="#003399"/><g fill="#FFCC00"><circle cx="50" cy="12" r="1.5"/><circle cx="54" cy="13.1" r="1.5"/><circle cx="56.9" cy="16" r="1.5"/><circle cx="58" cy="20" r="1.5"/><circle cx="56.9" cy="24" r="1.5"/><circle cx="54" cy="26.9" r="1.5"/><circle cx="50" cy="28" r="1.5"/><circle cx="46" cy="26.9" r="1.5"/><circle cx="43.1" cy="24" r="1.5"/><circle cx="42" cy="20" r="1.5"/><circle cx="43.1" cy="16" r="1.5"/><circle cx="46" cy="13.1" r="1.5"/></g></g>
+<rect width="60" height="40" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1"/></svg></p></div></div>
     <div class="txt">
       <p data-i18n="g1"></p><p data-i18n="g2"></p><p data-i18n="g3"></p><p data-i18n="g4"></p><h3 style="margin-top:10px" data-i18n="em_h"></h3><p data-i18n="e1"></p><p data-i18n="e2"></p>
     </div>
@@ -322,6 +342,7 @@ var T={
 en:{
 nav_why:"Our story",nav_feat:"Features",nav_contact:"Contact",
 tag:"A Wakfu builder by Unusual Italians",
+gl1:"Guild Lv. 10,",gl2:"High in the ranking of guilds",gl3:"Rubilax server",
 h1:"Create your build<br><em class=\"t0\">intuitive,</em> <em class=\"t1\">easy,</em> <em class=\"t2\">fast</em> <em class=\"t3\">and perfect!</em>",
 lead:"Unusual Builder is a free, unofficial build planner for Wakfu. Pick a class, equip items, runes and sublimations, choose your spells and passives, and watch your stats update as you go.",
 open:"Open the builder",story_btn:"Our story",free_note:"Free to use. No account needed. Works on your phone.",
@@ -354,6 +375,7 @@ foot1:"Free fan project",foot2:"Wakfu is an MMORPG published by Ankama. Unusual 
 fr:{
 nav_why:"Notre histoire",nav_feat:"Fonctions",nav_contact:"Contact",
 tag:"Un Wakfu builder par Unusual Italians",
+gl1:"Guilde niv. 10,",gl2:"Haut dans le classement des guildes",gl3:"Serveur Rubilax",
 h1:"Créez votre build<br><em class=\"t0\">intuitif,</em> <em class=\"t1\">facile,</em> <em class=\"t2\">rapide</em> <em class=\"t3\">et parfait !</em>",
 lead:"Unusual Builder est un planificateur de build gratuit et non officiel pour Wakfu. Choisissez une classe, équipez objets, runes et sublimations, sélectionnez sorts et passifs, et regardez vos stats se mettre à jour en direct.",
 open:"Ouvrir le builder",story_btn:"Notre histoire",free_note:"Gratuit. Sans compte. Fonctionne sur téléphone.",
@@ -386,6 +408,7 @@ foot1:"Projet de fans gratuit",foot2:"WAKFU est un MMORPG édité par Ankama. Un
 es:{
 nav_why:"Nuestra historia",nav_feat:"Funciones",nav_contact:"Contacto",
 tag:"Un Wakfu builder por Unusual Italians",
+gl1:"Gremio nv. 10,",gl2:"Alto en el ranking de gremios",gl3:"Servidor Rubilax",
 h1:"¡Crea tu build<br><em class=\"t0\">intuitiva,</em> <em class=\"t1\">fácil,</em> <em class=\"t2\">rápida</em> <em class=\"t3\">y perfecta!</em>",
 lead:"Unusual Builder es un planificador de builds gratuito y no oficial para Wakfu. Elige una clase, equipa objetos, runas y sublimaciones, escoge hechizos y pasivas, y mira cómo se actualizan tus estadísticas al instante.",
 open:"Abrir el builder",story_btn:"Nuestra historia",free_note:"Gratis. Sin cuenta. Funciona en el móvil.",
@@ -418,6 +441,7 @@ foot1:"Proyecto de fans gratuito",foot2:"Wakfu es un MMORPG editado por Ankama. 
 pt:{
 nav_why:"Nossa história",nav_feat:"Funções",nav_contact:"Contato",
 tag:"Um Wakfu builder por Unusual Italians",
+gl1:"Guilda nv. 10,",gl2:"Alto no ranking de guildas",gl3:"Servidor Rubilax",
 h1:"Crie sua build<br><em class=\"t0\">intuitiva,</em> <em class=\"t1\">fácil,</em> <em class=\"t2\">rápida</em> <em class=\"t3\">e perfeita!</em>",
 lead:"Unusual Builder é um planejador de builds gratuito e não oficial para Wakfu. Escolha uma classe, equipe itens, runas e sublimações, selecione feitiços e passivas, e veja seus atributos atualizarem na hora.",
 open:"Abrir o builder",story_btn:"Nossa história",free_note:"Grátis. Sem conta. Funciona no celular.",
