@@ -20,6 +20,10 @@ input,select,textarea{width:100%;margin-bottom:8px}
 button{cursor:pointer;font-weight:700}
 button.pri{background:#2c86a8;border-color:#5cc3e6}
 button.del{color:var(--bad)}
+.rolebar{display:flex;align-items:center;gap:8px;margin:0 0 8px}.rolebtn{display:flex;align-items:center;gap:6px;padding:5px 12px 5px 8px;font-weight:700;font-size:13px;margin:0}.rolebtn.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:#17384a}.rolebtn svg{display:block}
+.svc{display:block;padding:10px;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;margin-bottom:10px;background:#0b2230}.svh{display:flex;align-items:center;gap:10px;min-width:0;cursor:pointer}.svh b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rolepill{display:inline-flex;align-items:center;gap:4px;flex:none;font-size:12px;font-weight:800;padding:3px 8px 3px 5px;border-radius:999px;border:1px solid var(--line)}
+.svrow{display:flex;flex-wrap:nowrap;gap:3px;margin-top:8px}.svrow .svi{flex:1 1 0;min-width:0;max-width:34px;aspect-ratio:1;border-radius:4px;border:2px solid #888;background:#0b2230 center/cover no-repeat;padding:0;margin:0;cursor:pointer}.svbtns{display:grid;gap:6px;margin-top:10px}.svbtns button{padding:10px;margin:0}
+
 nav{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 nav button{flex:1 1 0;min-width:0;padding:9px 2px;font-size:13px}
 nav #flags button{flex:none}
@@ -264,7 +268,7 @@ main>#v-build,main>#v-build.hide{max-height:calc(100vh - 80px)}}
 </div>
 <div class="win"><div class="hd"><span>Character</span></div><div class="bd" id="sheet"></div></div>
 <div class="win"><div class="hd"><span>Build code</span></div><div class="bd"><textarea id="code" rows="3" placeholder="Press Share link to copy a link to this build. Paste a link or code here and press Load to open it."></textarea><div class="bar"><button id="clink" class="pri">Share link</button><button id="cgen">Code</button><button id="cload">Load</button></div><div class="bar" id="imgbar" style="margin-top:8px;display:none"><button id="cscan">Scan QR</button></div></div></div>
-<div class="bar"><button class="pri" id="save">Save build</button><button id="clear">Reset build</button></div>
+<div class="rolebar"><span class="mu">Build type</span><button type="button" class="rolebtn" id="rl-dpt" data-role="dpt"></button><button type="button" class="rolebtn" id="rl-supp" data-role="supp"></button></div><div class="bar"><button class="pri" id="save">Save build</button><button id="clear">Reset build</button></div>
 </section>
 
 <section id="v-items" class="hide">
@@ -1246,11 +1250,39 @@ function miniPreview(b){
  var sp=s.act.map(function(p){return box(p.id,ELC2[p.el]||"#d9b25c",20)}).join("")+s.pas.map(function(p){return box(p.id,"#d9b25c",20)}).join("");
  var st='<span style="color:#f06a6a">HP '+s.hp+'</span> <span style="color:#5cb8ff">AP '+s.ap+'</span> <span style="color:#9be35a">MP '+s.mp+'</span> <span style="color:#46e0d0">WP '+s.wp+'</span>';
  return '<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:8px">'+(items||'<span class="mu" style="font-size:12px">No items</span>')+'</div>'+(sp?'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:5px">'+sp+'</div>':'')+'<div style="margin-top:6px;font-size:13px;font-weight:700">'+st+'</div>'}
+var BROLE="";
+var ROLEC={dpt:["#f0663a","#b36be0"],supp:["#4aa8e8","#7bc043"]};
+function roleIcon(r,sz){var c=ROLEC[r];if(!c)return"";var id="rg"+r+sz;
+ var g='<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0.5" stop-color="'+c[0]+'"/><stop offset="0.5" stop-color="'+c[1]+'"/></linearGradient></defs>';
+ if(r==="dpt")return g+'<path d="M4 20 L16 8 M14 4h6v6" stroke="url(#'+id+')" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M4 20l3-1-2-2z" fill="url(#'+id+')"/></svg>';
+ return g+'<path d="M12 2.5 L20 5.5 V12 C20 17 16.5 20.5 12 22 C7.5 20.5 4 17 4 12 V5.5 Z" fill="url(#'+id+')"/><path d="M12 8v7M8.5 11.5h7" stroke="#0b2230" stroke-width="2.4" stroke-linecap="round"/></svg>'}
+function rolePill(r){if(!ROLEC[r])return"";return '<span class="rolepill" style="color:'+ROLEC[r][0]+'">'+roleIcon(r,16)+(r==="dpt"?"DPT":"SUPP")+'</span>'}
+function roleSync(){["dpt","supp"].forEach(function(r){var b=$("rl-"+r);if(!b)return;b.innerHTML=roleIcon(r,20)+'<span style="color:'+ROLEC[r][0]+'">'+(r==="dpt"?"DPT":"SUPP")+'</span>';b.classList.toggle("on",BROLE===r);b.onclick=function(){BROLE=BROLE===r?"":r;roleSync()}})}
 function renderSaved(){
  var L=$("savedlist");
- L.innerHTML=builds.length?builds.map(function(b){return '<div class="item sv" data-o="'+b.id+'" style="display:block;cursor:pointer"><div style="display:flex;align-items:center;gap:10px;min-width:0">'+(b.cls?emblem(b.cls,44):'')+'<div style="min-width:0;flex:1"><b>'+esc(b.name)+'</b>'+(b.lv?' <span class="mu">Lv.'+b.lv+'</span>':'')+'<div class="st">'+(b.cls||"No class")+'</div></div><span class="mu" style="font-size:20px">&#8250;</span></div>'+miniPreview(b)+'</div>'}).join(""):'<p class="mu" style="margin:0">No saved builds.</p>';
+ L.innerHTML=builds.length?builds.map(function(b){var s=savedObj(b),ids=[];
+  CARD_SLOTS.forEach(function(k){var id=s.e[k];if(id&&IDX[id])ids.push([k,id])});
+  var row=ids.map(function(p){return '<button class="svi" data-ic="'+esc(p[1])+'" data-it="'+b.id+'|'+p[0]+'" title="'+esc(IDX[p[1]].n[LI]||"")+'" style="border-color:'+(RARS[IDX[p[1]].r]||[0,"#888"])[1]+'"></button>'}).join("");
+  return '<div class="svc"><div class="svh" data-o="'+b.id+'">'+(b.cls?emblem(b.cls,40):'')+'<div style="min-width:0;flex:1"><b>'+esc(b.name)+'</b><div class="st">'+esc(b.cls||"No class")+(b.lv?' &middot; Lv.'+b.lv:'')+'</div></div>'+rolePill(b.role)+'</div><div class="svrow">'+(row||'<span class="mu" style="font-size:12px">No items</span>')+'</div><div class="svbtns"><button class="pri" data-open="'+b.id+'">Open</button><button class="del" data-del="'+b.id+'">Delete</button></div></div>'}).join(""):'<p class="mu" style="margin:0">No saved builds.</p>';
  fillMiniIcons(L);
- Array.prototype.forEach.call(L.querySelectorAll("[data-o]"),function(r){r.onclick=function(){openSavedPopup(r.getAttribute("data-o"))}});
+ var Q=function(sel,fn){Array.prototype.forEach.call(L.querySelectorAll(sel),fn)};
+ Q("[data-o]",function(r){r.onclick=function(){openSavedPopup(r.getAttribute("data-o"))}});
+ Q("[data-it]",function(r){r.onclick=function(){var p=r.getAttribute("data-it").split("|");openSavedItem(p[0],p[1])}});
+ Q("[data-open]",function(r){r.onclick=function(){var f=byId(builds,r.getAttribute("data-open"));if(!f)return;applyBuild(savedObj(f));BROLE=f.role||"";roleSync();showTab("build");toast2("Build opened")}});
+ Q("[data-del]",function(r){var sure=false;r.onclick=function(){if(!sure){sure=true;r.textContent="Tap again to delete";setTimeout(function(){sure=false;r.textContent="Delete"},3000);return}var id=r.getAttribute("data-del");builds=builds.filter(function(x){return x.id!==id});persist();renderSaved()}});
+}
+function openSavedItem(id,slot){
+ var f=byId(builds,id);if(!f)return;var old=document.getElementById("svit");if(old)old.remove();
+ var h=withBuild(savedObj(f),function(){var cid=cur[slot],it=getItem(cid);if(!it)return"";
+  var ic=ICO[String(cid)],o=sb[slot]||{},a=it.sh?rnList(slot,it):[],tot=0;
+  var rows=a.map(function(x){var r=x.r?RI[x.r]:null;return '<div style="display:flex;align-items:center;gap:8px;margin:3px 0">'+sockImg(x.c,28,r?r.s:null,!!r)+'<span style="font-size:14px">'+(r?esc(r.n[LI])+' <b style="color:#9be35a">+'+runeVal(r,rLv(r,it,x),slot)+'</b>':'<span class="mu">Empty socket</span>')+'</span></div>'}).join("");
+  var sub=function(k,lab){var z=o[k]&&SI[o[k]]?SI[o[k]]:null;return z?'<div style="display:flex;align-items:center;gap:8px;margin:4px 0">'+(ICO[o[k]]?'<img src="'+ICO[o[k]]+'" style="width:26px;height:26px;border-radius:4px">':'')+'<span style="font-size:14px"><span class="mu">'+lab+'</span> <b style="color:var(--gold)">'+esc(z.n[LI])+'</b></span></div>':""};
+  var subs=sub("sp",it.r===5?"Relic":"Epic")+sub("sb","Scroll");
+  return '<div class="item" style="border-left:5px solid '+RARS[it.r][1]+';align-items:flex-start;gap:8px">'+(ic?'<img src="'+ic+'" style="width:52px;height:52px;border-radius:6px;flex:none">':"")+'<div style="min-width:0;flex:1"><b style="font-size:16px">'+esc(it.name)+'</b><div style="margin:4px 0;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center"><span>'+tyBadge(slot,IDX[cid],IDX[cid]&&IDX[cid].y,24)+'</span><span style="color:'+RARS[it.r][1]+'">'+gem(it.r,20)+' '+RARN[it.r]+'</span><span class="mu">Lv.'+it.lv+'</span></div><div class="st">'+statsHtml(it.stats,null,slot,true)+'</div>'+itemEffHtml(cid)+'</div></div>'+(rows?'<div style="margin-top:10px"><div class="mu" style="margin-bottom:2px">Enchantment</div>'+rows+'</div>':'')+(subs?'<div style="margin-top:8px"><div class="mu">Sublimation</div>'+subs+'</div>':'')});
+ if(!h)return;
+ var o=document.createElement("div");o.id="svit";o.style.cssText="position:fixed;inset:0;z-index:10000;background:#000b;display:flex;align-items:center;justify-content:center;padding:12px";
+ o.innerHTML='<div style="width:100%;max-width:480px;max-height:92vh;overflow:auto;background:var(--win);border:1px solid var(--gold);border-radius:14px;padding:12px"><div style="display:flex;justify-content:flex-end;margin-bottom:6px"><button id="svix" style="padding:4px 10px;margin:0">&times;</button></div>'+h+'</div>';
+ document.body.appendChild(o);o.onclick=function(e){if(e.target===o)o.remove()};$("svix").onclick=function(){o.remove()};Array.prototype.forEach.call(o.querySelectorAll("[data-xechg]"),function(b){b.remove()});
 }
 function openSavedPopup(id){
  var f=byId(builds,id);if(!f)return;var old=document.getElementById("svpop");if(old)old.remove();
@@ -1261,7 +1293,7 @@ function openSavedPopup(id){
  o.onclick=function(e){if(e.target===o)close()};$("svx").onclick=close;
  var so=savedObj(f),link=null,blob=null,sure=false;
  $("svpub").onclick=function(){close();openPublish(id)};
- $("svload").onclick=function(){applyBuild(so);showTab("build");close();toast2("Build loaded")};
+ $("svload").onclick=function(){applyBuild(so);BROLE=f.role||"";showTab("build");close();toast2("Build loaded")};
  $("svdel").onclick=function(){if(!sure){sure=true;this.textContent="Tap again to delete";return}builds=builds.filter(function(x){return x.id!==id});persist();close();renderSaved()};
  $("svshare").onclick=function(){if(link){close();shareSheet(link,f.name)}else toast2("Preparing the link…")};
  var fname=((f.name||"build").replace(/[^A-Za-z0-9 _-]/g,"").trim()||"build")+".png";
@@ -1270,7 +1302,7 @@ function openSavedPopup(id){
   $("svsave").disabled=false;$("svsave").onclick=function(){canvasPng(cv).then(function(b){saveImageBlob(b,fname)})}
  }).catch(function(){var p=$("svprev");if(p)p.innerHTML='<span class="mu">Preview not available.</span>'});
 }
-function renderAll(){renderSlots();renderSel();renderRunes();renderEnch();if(CURTAB==="ench"&&typeof SUBF!=="undefined"&&SUBF.init)renderSub();renderSumSpells();renderChips();renderSpells();renderSpBar();renderDeck();renderEmblems();renderApt();renderSheet();renderPicker();renderLib()}
+function renderAll(){roleSync();renderSlots();renderSel();renderRunes();renderEnch();if(CURTAB==="ench"&&typeof SUBF!=="undefined"&&SUBF.init)renderSub();renderSumSpells();renderChips();renderSpells();renderSpBar();renderDeck();renderEmblems();renderApt();renderSheet();renderPicker();renderLib()}
 
 var IS={q:"",slot:"",rar:"",stat:"",min:"",max:"",init:0,mode:"items",type:""};
 var ISLOTS=["HEAD","NECK","CHEST","SHOULDERS","BACK","BELT","RING","LEGS","WEAPON","ACCESSORY","PET","MOUNT"];
@@ -1358,7 +1390,7 @@ $("bcls").innerHTML='<option value="">Class</option>'+CLASSES.map(function(c){re
 $("spcls").innerHTML='<option value="">Common (all classes)</option>'+CLASSES.map(function(c){return '<option>'+c+'</option>'}).join("");
 $("spadd").onclick=function(){var n=$("spname").value.trim();if(!n){$("spname").focus();return}
  spells.push({id:uid(),name:n,kind:$("spkind").value,el:$("spel").value,cls:$("spcls").value});$("spname").value="";persist();renderAll()};
-$("save").onclick=function(){builds.push({id:uid(),name:$("bname").value.trim()||"New Build",lv:lv(),cls:$("bcls").value,slots:JSON.parse(JSON.stringify(cur)),rn:JSON.parse(JSON.stringify(rn)),sb:JSON.parse(JSON.stringify(sb)),act:act.slice(),pas:pas.slice(),nl:JSON.parse(JSON.stringify(nl)),mech:mech,apt:JSON.parse(JSON.stringify(apt)),el:elOrder.slice(),xe:JSON.parse(JSON.stringify(xe))});persist();showTab("saved")};
+$("save").onclick=function(){builds.push({id:uid(),name:$("bname").value.trim()||"New Build",lv:lv(),cls:$("bcls").value,role:BROLE,slots:JSON.parse(JSON.stringify(cur)),rn:JSON.parse(JSON.stringify(rn)),sb:JSON.parse(JSON.stringify(sb)),act:act.slice(),pas:pas.slice(),nl:JSON.parse(JSON.stringify(nl)),mech:mech,apt:JSON.parse(JSON.stringify(apt)),el:elOrder.slice(),xe:JSON.parse(JSON.stringify(xe))});persist();showTab("saved")};
 function askConfirm(msg,yes){var bk=document.createElement("div");bk.id="ddbk";bk.style.zIndex=129;var d=document.createElement("div");d.id="cfm";
  d.innerHTML='<p>'+msg+'</p><div class="b"><button class="n">Cancel</button><button class="y">Yes, reset all</button></div>';
  function close(){bk.remove();d.remove()}bk.onclick=close;d.querySelector(".n").onclick=close;d.querySelector(".y").onclick=function(){close();yes()};
