@@ -55,7 +55,7 @@ nav button.on,.bar button.on{background:var(--gold);color:#1a1405;border-color:v
 .ec2 .esk{grid-column:1;grid-row:2;align-self:end;display:flex;gap:3px;align-items:center;flex-wrap:nowrap}
 .ec2 .ecr{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-end;gap:3px;min-width:0}
 .ec2 .ect{font-weight:800;color:var(--gold);font-size:13px;height:17px;line-height:17px;white-space:nowrap}
-.ec2 .ecb{display:flex;gap:4px;justify-content:flex-end}.ec2 .ecb button{padding:4px;min-width:38px;height:38px;font-size:12px;margin:0}
+.ec2 .ecb{display:flex;gap:4px;justify-content:flex-end}.ec2 .ecb button{padding:4px;min-width:38px;height:38px;font-size:12px;margin:0}.ec2 .ecb button.rst{min-width:0;padding:4px 8px;font-size:12px;font-weight:600}
 .ec2 .ecsub{width:100%;min-width:0;display:flex;flex-direction:column;align-items:flex-end;gap:1px}
 .ec2 .esub{flex-basis:auto;width:100%;display:flex;flex-direction:column;align-items:flex-end;gap:1px;padding:0;font-size:12px;min-width:0}
 .ec2 .esub .pcs{display:flex;transform:scale(.8);transform-origin:right center}
@@ -464,7 +464,7 @@ function renderEnch(){
   h+='</div><div class="ecr"><div class="ect">'+(a.length?tt+' shards':'')+'</div><div class="ecb">';
   if(it.r===5||it.r===7)h+='<button '+(o.sp&&SI[o.sp]?'data-hsub="'+o.sp+'" ':'')+'data-gs="'+s+'|sp" title="'+(o.sp&&SI[o.sp]?esc(SI[o.sp].n[LI]):(it.r===5?"Relic":"Epic")+' sublimation')+'" style="color:'+(it.r===5?"#b46bf0":"#ee6fc0")+'">'+(o.sp&&SI[o.sp]&&ICO[o.sp]?'<img src="'+ICO[o.sp]+'" style="width:26px;height:26px;border-radius:4px;display:block">':'\u2605')+'</button>';
   if(it.sh)h+='<button '+(o.sb&&SI[o.sb]?'data-hsub="'+o.sb+'" ':'')+'data-gs="'+s+'|sb" title="'+(o.sb&&SI[o.sb]?esc(SI[o.sb].n[LI]):'Sublimation Scroll')+'">'+scrollImg(24,o.sb&&SI[o.sb]?1:.45,o.sb&&SI[o.sb]?"#d9b25c":"")+'</button>';
-  if(a.length)h+='<button data-ca="'+s+'" title="Clear this item\'s runes" style="color:var(--bad)">\u2715</button>';
+  if(a.length||sb[s])h+='<button class="rst" data-ca="'+s+'" title="Reset this item: remove runes, socket colors and sublimations" style="color:var(--bad)">\u21BA Reset</button>';
   h+='</div><div class="ecsub">';
   [["sb",o.sb],["sp",o.sp]].forEach(function(p){var z=p[1]&&SI[p[1]]?SI[p[1]]:null;if(!z)return;
    var ok=p[0]==="sp"||z.p.every(function(c,k){return a[k]&&a[k].c===c});
@@ -494,7 +494,7 @@ function enPopRender(){var old=$("enpop"),s=ENSEL&&ENSEL.s,it=s?getItem(cur[s]):
  enWire(pb);enPalWire(pb)}
 function enWire(root){var q=function(sel,fn){Array.prototype.forEach.call(root.querySelectorAll(sel),fn)};
  q("[data-ex]",function(b){b.onclick=function(){var a=b.getAttribute("data-ex").split("|"),x=rn[a[0]][+a[1]];x.r=null;x.l=0;renderAll()}});
- q("[data-ca]",function(b){b.onclick=function(){var s=b.getAttribute("data-ca");(rn[s]||[]).forEach(function(x){x.r=null;x.l=0});renderAll()}});
+ q("[data-ca]",function(b){b.onclick=function(){var s=b.getAttribute("data-ca");(rn[s]||[]).forEach(function(x){x.r=null;x.l=0;x.c=0});delete sb[s];Object.keys(ENBK).forEach(function(k){if(k.split("|")[0]===s)delete ENBK[k]});if(ENSEL&&ENSEL.s===s){ENSEL=null;ENPOP=false}renderAll();toast2("Item reset")}});
  q("[data-gs]",function(b){b.onclick=function(){var a=b.getAttribute("data-gs").split("|");goSub(a[0],a[1])}});
  q("[data-em]",function(b){b.onclick=function(){var s=b.getAttribute("data-em"),k=0;rn[s].forEach(function(x){if(x.r)k++;x.l=0});ENAUTO=true;renderAll();toast2(k?"All effects on this item set to max level":"Max level selected: the next effects you pick will be at max level")}});
  q("[data-el]",function(b){b.onclick=function(ev){var a=b.getAttribute("data-el").split("|"),s=a[0],it=getItem(cur[s]),x=rn[s][+a[1]],r=RI[x.r],M=runeMax(r,it.lv),d=+a[2];
