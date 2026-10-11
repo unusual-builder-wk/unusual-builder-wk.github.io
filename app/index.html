@@ -21,8 +21,8 @@ button{cursor:pointer;font-weight:700}
 button.pri{background:#2c86a8;border-color:#5cc3e6}
 button.del{color:var(--bad)}
 .rolebar.shake{animation:shk .35s}@keyframes shk{20%{transform:translateX(-6px)}50%{transform:translateX(6px)}80%{transform:translateX(-3px)}}.rolebar{display:flex;align-items:center;gap:8px;margin:0 0 8px}.rolebtn{display:flex;align-items:center;gap:6px;padding:5px 12px 5px 8px;font-weight:700;font-size:13px;margin:0}.rolebtn.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:#17384a}.rolebtn svg{display:block}
-.svc{display:block;padding:10px;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;margin-bottom:10px;background:#0b2230}.svh{display:flex;align-items:center;gap:10px;min-width:0;cursor:pointer}.svh b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rolepill{display:inline-flex;align-items:center;gap:4px;flex:none;font-size:12px;font-weight:800;padding:3px 8px 3px 5px;border-radius:999px;border:1px solid var(--line)}
-.svrow{display:flex;flex-wrap:nowrap;gap:3px;margin-top:8px}.svrow .svi{flex:1 1 0;min-width:0;max-width:34px;aspect-ratio:1;border-radius:4px;border:2px solid #888;background:#0b2230 center/cover no-repeat;padding:0;margin:0;cursor:pointer}.svbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}.svbtns button{padding:10px;margin:0}
+.svc{display:block;padding:10px;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;margin-bottom:10px;background:#0b2230}.svh{display:flex;align-items:center;gap:10px;min-width:0;cursor:pointer}.svh b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.rolepill{display:inline-flex;align-items:center;gap:4px;flex:none;font-size:12px;font-weight:800;padding:3px 8px 3px 5px;border-radius:999px;border:1px solid var(--line)}
+.svrow{display:flex;flex-wrap:nowrap;gap:3px;margin-top:8px}.svrow .svi{flex:1 1 0;min-width:0;max-width:34px;aspect-ratio:1;border-radius:4px;border:2px solid #888;background:#0b2230 center/cover no-repeat;padding:0;margin:0;cursor:pointer}.svbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}.svbtns button{padding:6px;margin:0;font-size:14px}.svh .st{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.svem{position:relative;flex:none;padding-bottom:6px}.svem .rolepill{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);padding:1px 6px 1px 3px;font-size:10px;background:#0b2230;gap:2px}.svs{flex:none;font-size:10px;line-height:1.2}.svs .r1,.svs .r2{display:grid;grid-template-columns:repeat(4,auto);gap:2px 4px;justify-items:start}.svs .r1{font-weight:800;margin-bottom:3px}.svs .r2>div{display:flex;flex-direction:column;align-items:flex-start}.svs .r2 img{margin-right:2px!important;display:inline-block!important}.svs .r2 b{font-weight:800;display:inline!important;overflow:visible!important}.svs .r2 i{font-style:normal;font-size:10px;font-weight:700}
 
 nav{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 nav button{flex:1 1 0;min-width:0;padding:9px 2px;font-size:13px}
@@ -1057,6 +1057,7 @@ function elVar(t){var o={m:{},r:{}};Object.keys(cur).forEach(function(k){var it=
 function xePicker(slot,it){var h="";it.stats.forEach(function(x){if(!/^e[mr][123]$/.test(x.id))return;var n=parseInt(x.id.charAt(2)),sel=xeList(slot,x.id),isM=x.id.charAt(1)==="m";
  h+='<div style="margin:6px 0 2px"><div class="mu" style="font-size:12px">'+(isM?"Mastery":"Resistance")+' '+(x.v>0?"+":"")+x.v+' &mdash; choose '+n+' element'+(n>1?"s":"")+' ('+(isM?"mastery":"resistance")+' is applied to each chosen element)</div><div style="display:flex;gap:4px;margin-top:4px;flex-wrap:nowrap">'+ELN.map(function(e){var on=sel.indexOf(e)>=0;return '<button data-xe="'+slot+'|'+x.id+'|'+e+'" style="flex:1 1 0;min-width:0;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:2px;margin:0;padding:5px 2px;border-radius:14px;font-size:11.5px;border:2px solid '+ELC[e]+';background:'+(on?ELC[e]:"transparent")+';color:'+(on?"#10141a":ELC[e])+';font-weight:700">'+(ICON["m"+e]||"")+e+'</button>'}).join("")+'</div></div>'});return h}
 /* ---------- character sheet ---------- */
+function elImg(e,sz){var u=SICO["m"+e];return u?'<img src="'+u+'" alt="" style="width:'+sz+'px;height:'+sz+'px;vertical-align:middle;margin-right:5px;border-radius:3px">':'<i style="display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;background:'+ELC[e]+'"></i>'}
 function renderSheet(){
  var t={};
  Object.keys(cur).forEach(function(k){var it=getItem(cur[k]);if(it)it.stats.forEach(function(x){t[x.id]=(t[x.id]||0)+x.v});var LS=LVLSTAT[String(cur[k])];if(LS)LS.forEach(function(e){t[e[0]]=(t[e[0]]||0)+Math.floor(e[1]*(lv()||0))})});
@@ -1072,7 +1073,7 @@ function renderSheet(){
   var k=elOrder.indexOf(e),xm=0,xr=0;
   if(k>=0)for(var n=1;n<=3;n++)if(k<n){xm+=v("em"+n);xr+=v("er"+n)}
   var m=v("elem")+v("m"+e)+xm+(XV.m[e]||0),r=v("res")+v("r"+e)+xr+(XV.r[e]||0),pc=Math.floor((1-Math.pow(.8,r/100))*100);
-  return '<div><div class="e1"><i style="background:'+ELC[e]+'"></i>'+fm(m)+'</div><div class="e2" style="color:'+ELC[e]+'">'+pc+'% ('+fm(r)+')</div></div>';
+  return '<div><div class="e1">'+elImg(e,20)+fm(m)+'</div><div class="e2" style="color:'+ELC[e]+'">'+pc+'% ('+fm(r)+')</div></div>';
  }).join("")+'</div>';
  function colm(ids){return '<div>'+ids.map(function(id){var x=round(v(id));return '<div class="r2"><span>'+ic(id)+esc(N("stat",id).replace(/^%\s*/,""))+'</span><b class="'+(x<0?"neg":x>0?"pos":"")+'">'+fm(x,PCT[id])+'</b></div>'}).join("")+'</div>'}
  function sec(title,a,b){return '<div class="sech">'+title+'</div><div class="tc">'+colm(a)+colm(b)+'</div>'}
@@ -1256,14 +1257,17 @@ function roleIcon(r,sz){var c=ROLEC[r];if(!c)return"";var id="rg"+r+sz;
  var g='<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0.5" stop-color="'+c[0]+'"/><stop offset="0.5" stop-color="'+c[1]+'"/></linearGradient></defs>';
  if(r==="dpt")return g+'<path d="M4 20 L16 8 M14 4h6v6" stroke="url(#'+id+')" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M4 20l3-1-2-2z" fill="url(#'+id+')"/></svg>';
  return g+'<path d="M12 2.5 L20 5.5 V12 C20 17 16.5 20.5 12 22 C7.5 20.5 4 17 4 12 V5.5 Z" fill="url(#'+id+')"/><path d="M12 8v7M8.5 11.5h7" stroke="#0b2230" stroke-width="2.4" stroke-linecap="round"/></svg>'}
-function rolePill(r){if(!ROLEC[r])return"";return '<span class="rolepill" style="color:'+ROLEC[r][0]+'">'+roleIcon(r,16)+(r==="dpt"?"DPT":"SUPP")+'</span>'}
+function rolePill(r){if(!ROLEC[r])return"";return '<span class="rolepill" style="color:'+ROLEC[r][0]+'">'+roleIcon(r,12)+(r==="dpt"?"DPT":"SUPP")+'</span>'}
 function roleSync(){var sn=$("svname");if(sn&&!sn.value&&document.activeElement!==sn)sn.value=$("bname").value;["dpt","supp"].forEach(function(r){var b=$("rl-"+r);if(!b)return;b.innerHTML=roleIcon(r,20)+'<span style="color:'+ROLEC[r][0]+'">'+(r==="dpt"?"DPT":"SUPP")+'</span>';b.classList.toggle("on",BROLE===r);b.onclick=function(){BROLE=BROLE===r?"":r;roleSync()}})}
 function renderSaved(){
  var L=$("savedlist");
  L.innerHTML=builds.length?builds.map(function(b){var s=savedObj(b),ids=[];
   CARD_SLOTS.forEach(function(k){var id=s.e[k];if(id&&IDX[id])ids.push([k,id])});
   var row=ids.map(function(p){return '<button class="svi" data-ic="'+esc(p[1])+'" data-it="'+b.id+'|'+p[0]+'" title="'+esc(IDX[p[1]].n[LI]||"")+'" style="border-color:'+(RARS[IDX[p[1]].r]||[0,"#888"])[1]+'"></button>'}).join("");
-  return '<div class="svc"><div class="svh" data-o="'+b.id+'">'+(b.cls?emblem(b.cls,40):'')+'<div style="min-width:0;flex:1"><b>'+esc(b.name)+'</b><div class="st">'+esc(b.cls||"No class")+(b.lv?' &middot; Lv.'+b.lv:'')+'</div></div>'+rolePill(b.role)+'</div><div class="svrow">'+(row||'<span class="mu" style="font-size:12px">No items</span>')+'</div><div class="svbtns"><button class="pri" data-open="'+b.id+'">Open</button><button class="del" data-del="'+b.id+'">Delete</button></div></div>'}).join(""):'<p class="mu" style="margin:0">No saved builds.</p>';
+  var sn=null;try{sn=cardSnap(s)}catch(e){}
+  var fmn=function(x){x=Math.round(x);return Math.abs(x)>=1000?x.toLocaleString("en-US"):String(x)};
+  var stx=sn?'<div class="svs"><div class="r1"><span style="color:#f06a6a">'+fmn(sn.hp)+'</span><span style="color:#5cb8ff">'+sn.ap+' AP</span><span style="color:#9be35a">'+sn.mp+' MP</span><span style="color:#46e0d0">'+sn.wp+' WP</span></div><div class="r2">'+sn.el.map(function(q){return '<div><span style="white-space:nowrap">'+elImg(q.e,10)+'<b>'+fmn(q.m)+'</b></span><i style="color:'+ELC[q.e]+'">'+q.pc+'%</i></div>'}).join("")+'</div></div>':'';
+  return '<div class="svc"><div class="svh" data-o="'+b.id+'"><div class="svem">'+(b.cls?emblem(b.cls,40):'')+rolePill(b.role)+'</div><div style="min-width:0;flex:1"><b>'+esc(b.name)+'</b><div class="st">'+esc(b.cls||"No class")+(b.lv?' &middot; Lv.'+b.lv:'')+'</div></div>'+stx+'</div><div class="svrow">'+(row||'<span class="mu" style="font-size:12px">No items</span>')+'</div><div class="svbtns"><button class="pri" data-open="'+b.id+'">Open</button><button class="del" data-del="'+b.id+'">Delete</button></div></div>'}).join(""):'<p class="mu" style="margin:0">No saved builds.</p>';
  fillMiniIcons(L);
  var Q=function(sel,fn){Array.prototype.forEach.call(L.querySelectorAll(sel),fn)};
  Q("[data-o]",function(r){r.onclick=function(){openSavedPopup(r.getAttribute("data-o"))}});
