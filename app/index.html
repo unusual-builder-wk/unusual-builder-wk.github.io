@@ -447,7 +447,7 @@ function renderEnch(){
   h+='</div>';
   [["sb",o.sb],["sp",o.sp]].forEach(function(p){var z=p[1]&&SI[p[1]]?SI[p[1]]:null;if(!z)return;
    var ok=p[0]==="sp"||z.p.every(function(c,k){return a[k]&&a[k].c===c}),tx=subLvText(z)||ef(z);
-   h+='<div class="esub'+(ok?'':' bad')+'" data-hsub="'+z.i+'">'+(p[0]==="sb"?patChips(z.p):'')+'<b>'+esc(z.n[LI])+'</b>'+(ok?'':'<span class="cnm">Condition not met</span>')+'<span class="et">'+esc(tx)+'</span></div>'});
+   h+='<div class="esub'+(ok?'':' bad')+'" data-hsub="'+z.i+'">'+(p[0]==="sb"?patChips(z.p):'')+'<b class="esn" data-gs="'+s+'|'+p[0]+'" title="Open in the sublimation list" style="cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px">'+esc(z.n[LI])+'</b>'+(ok?'':'<span class="cnm">Condition not met</span>')+'</div>'});
   if(on){var i=ENSEL.i,x=i!=null?a[i]:null,r=x&&x.r?RI[x.r]:null;
    h+='<div class="ed">';
    if(x){h+='<span><b>Socket '+(i+1)+'</b> '+sockImg(x.c,16,null,false)+'</span>';
