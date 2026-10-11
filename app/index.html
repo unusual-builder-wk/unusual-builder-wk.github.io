@@ -458,7 +458,7 @@ function renderEnch(){
   n++;
   var a=it.sh?rnList(s,it):[],o=sb[s]||{},ic=ICO[String(cur[s])],tt=enItemTotal(s,it);tot+=tt;
   a.forEach(function(x){if(x.r&&RI[x.r]){var r=RI[x.r];rec[r.s]=(rec[r.s]||0)+runeVal(r,rLv(r,it,x),s)}});
-  h+='<div class="ec2" style="border-left-color:'+RARS[it.r][1]+'"><div class="ech">'+(ic?'<img class="ic" src="'+ic+'" alt="">':'')+'<div class="nm"><b>'+esc(it.name)+'</b>'+esc(N("slot",s))+' \u00b7 Lv.'+it.lv+'</div></div><div class="esk">';
+  h+='<div class="ec2" id="ec-'+s+'" style="border-left-color:'+RARS[it.r][1]+'"><div class="ech">'+(ic?'<img class="ic" src="'+ic+'" alt="">':'')+'<div class="nm"><b>'+esc(it.name)+'</b>'+esc(N("slot",s))+' \u00b7 Lv.'+it.lv+'</div></div><div class="esk">';
   a.forEach(function(x,i){var r=x.r?RI[x.r]:null,sel=ENPOP&&ENSEL&&ENSEL.s===s&&ENSEL.i===i;h+='<button class="es'+(sel?' on':'')+'" data-es="'+s+'|'+i+'" title="'+(r?esc(r.n[LI])+' +'+runeVal(r,rLv(r,it,x),s):'Empty socket \u00b7 tap to choose an effect')+'">'+sockImg(x.c,36,r?r.s:null,!!r)+'</button>'});
   if(!a.length)h+='<span class="mu" style="font-size:12px">No enchantment sockets</span>';
   h+='</div><div class="ecr"><div class="ect">'+(a.length?tt+' shards':'')+'</div><div class="ecb">';
@@ -636,7 +636,7 @@ function applySub(id){var z=SI[id],T=subTarget();if(!z||!T)return;var s=T.slot,i
  else{var a=it.sh?rnList(s,it):[];if(!subOk(z,a)){toast("This item's rune slots don't fit this sublimation.");return}
   for(var i=0;i<z.p.length;i++){var cx=a[i];if(cx.c===0){cx.c=z.p[i];var r0=cx.r?RI[cx.r]:null;if(r0&&r0.c!==cx.c)cx.r=null}}
   sb[s].sb=String(id)}
- SUBT=null;renderAll();renderSub();toast2(z.n[LI]+" applied"+(T.x==="sb"&&z.p.length?" · slots set to "+z.p.map(function(c){return RCOL[c][1]}).join(" "):""))}
+ SUBT=null;renderAll();renderSub();setTimeout(function(){var c=$("ec-"+s);if(c&&window.innerWidth<1100)c.scrollIntoView({behavior:"smooth",block:"center"})},80);toast2(z.n[LI]+" applied"+(T.x==="sb"&&z.p.length?" · slots set to "+z.p.map(function(c){return RCOL[c][1]}).join(" "):""))}
 function rShort(r){return sname(r.s).replace("Elemental Mastery","Elem").replace("Melee Mastery","Melee").replace("Distance Mastery","Dist").replace("Healing Mastery","Heal").replace("Critical Mastery","Crit").replace("Berserk Mastery","Bers").replace("Rear Mastery","Rear").replace(" Resistance"," Res").replace("Health Points","HP").replace("Initiative","Init")}
 function renderRunes(){
  var h="",s=SEL;
