@@ -22,7 +22,7 @@ button.pri{background:#2c86a8;border-color:#5cc3e6}
 button.del{color:var(--bad)}
 .rolebar.shake{animation:shk .35s}@keyframes shk{20%{transform:translateX(-6px)}50%{transform:translateX(6px)}80%{transform:translateX(-3px)}}.rolebar{display:flex;align-items:center;gap:8px;margin:0 0 8px}.rolebtn{display:flex;align-items:center;gap:6px;padding:5px 12px 5px 8px;font-weight:700;font-size:13px;margin:0}.rolebtn.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:#17384a}.rolebtn svg{display:block}
 .svc{display:block;padding:10px;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;margin-bottom:10px;background:#0b2230}.svh{display:flex;align-items:center;gap:10px;min-width:0;cursor:pointer}.svh b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rolepill{display:inline-flex;align-items:center;gap:4px;flex:none;font-size:12px;font-weight:800;padding:3px 8px 3px 5px;border-radius:999px;border:1px solid var(--line)}
-.svrow{display:flex;flex-wrap:nowrap;gap:3px;margin-top:8px}.svrow .svi{flex:1 1 0;min-width:0;max-width:34px;aspect-ratio:1;border-radius:4px;border:2px solid #888;background:#0b2230 center/cover no-repeat;padding:0;margin:0;cursor:pointer}.svbtns{display:grid;gap:6px;margin-top:10px}.svbtns button{padding:10px;margin:0}
+.svrow{display:flex;flex-wrap:nowrap;gap:3px;margin-top:8px}.svrow .svi{flex:1 1 0;min-width:0;max-width:34px;aspect-ratio:1;border-radius:4px;border:2px solid #888;background:#0b2230 center/cover no-repeat;padding:0;margin:0;cursor:pointer}.svbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}.svbtns button{padding:10px;margin:0}
 
 nav{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 nav button{flex:1 1 0;min-width:0;padding:9px 2px;font-size:13px}
@@ -1269,7 +1269,7 @@ function renderSaved(){
  Q("[data-o]",function(r){r.onclick=function(){openSavedPopup(r.getAttribute("data-o"))}});
  Q("[data-it]",function(r){r.onclick=function(){var p=r.getAttribute("data-it").split("|");openSavedItem(p[0],p[1])}});
  Q("[data-open]",function(r){r.onclick=function(){var f=byId(builds,r.getAttribute("data-open"));if(!f)return;applyBuild(savedObj(f));BROLE=f.role||"";roleSync();showTab("build");toast2("Build opened")}});
- Q("[data-del]",function(r){var sure=false;r.onclick=function(){if(!sure){sure=true;r.textContent="Tap again to delete";setTimeout(function(){sure=false;r.textContent="Delete"},3000);return}var id=r.getAttribute("data-del");builds=builds.filter(function(x){return x.id!==id});persist();renderSaved()}});
+ Q("[data-del]",function(r){var sure=false;r.onclick=function(){if(!sure){sure=true;r.textContent="Tap again";setTimeout(function(){sure=false;r.textContent="Delete"},3000);return}var id=r.getAttribute("data-del");builds=builds.filter(function(x){return x.id!==id});persist();renderSaved()}});
 }
 function openSavedItem(id,slot){
  var f=byId(builds,id);if(!f)return;var old=document.getElementById("svit");if(old)old.remove();
