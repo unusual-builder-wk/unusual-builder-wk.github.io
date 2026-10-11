@@ -471,7 +471,7 @@ function renderEnch(){
    h+='<div class="esub'+(ok?'':' bad')+'" data-hsub="'+z.i+'">'+(p[0]==="sb"&&z.p.length?'<span class="pcs">'+patChips(z.p)+'</span>':'')+'<b class="esn" data-gs="'+s+'|'+p[0]+'" title="'+(ok?'Open in the sublimation list':'Condition not met \u00b7 open in the sublimation list')+'">'+(ok?'':'\u26a0 ')+esc(z.n[LI])+'</b></div>'});
   h+='</div></div></div>'});
  var rc=Object.keys(rec).map(function(k){return'<span>'+(ICON[k]||"")+' '+esc(sname(k).replace(/^%\s*/,""))+' <b>+'+rec[k]+'</b></span>'}).join("");
- $("en-top").innerHTML='<div class="en-top"><span class="en-tot">Total: '+tot+' shards</span><span class="mu">cost of all effects</span><button id="en-ae" style="margin-left:auto;border-color:var(--gold);color:var(--gold)">\u2728 Auto-enchant</button></div><div class="en-lvl"><label><input type="checkbox" id="en-auto" style="width:auto;margin:0 6px 0 0"'+(ENAUTO?' checked':'')+'>Auto (max level)</label><input type="range" id="en-lvl" min="1" max="11" value="'+ENLVL+'"'+(ENAUTO?' disabled':'')+'><b id="en-lvv">'+(ENAUTO?'':'Lv. '+ENLVL)+'</b><span class="mu">level given to the next effect you pick</span></div>'+(rc?'<div class="en-rec">'+rc+'</div>':'');
+ $("en-top").innerHTML='<div class="en-top"><span class="en-tot">Total: '+tot+' shards</span><span class="mu">cost of all effects</span><button id="en-ae" style="margin-left:auto;border-color:var(--gold);color:var(--gold)">\u2728 Auto-enchant</button></div><div class="en-lvl"><label><input type="checkbox" id="en-auto" style="width:auto;margin:0 6px 0 0"'+(ENAUTO?' checked':'')+'>Auto (max level)</label><input type="range" id="en-lvl" min="1" max="10" value="'+ENLVL+'"'+(ENAUTO?' disabled':'')+'><b id="en-lvv">'+(ENAUTO?'':'Lv. '+ENLVL)+'</b><span class="mu">level given to the next effect you pick</span></div>'+(rc?'<div class="en-rec">'+rc+'</div>':'');
  $("en-list").innerHTML=h;
  $("en-auto").onchange=function(){ENAUTO=this.checked;renderEnch()};$("en-lvl").oninput=function(){ENLVL=+this.value;$("en-lvv").textContent="Lv. "+ENLVL};
  var q=function(sel,fn){Array.prototype.forEach.call($("en-list").querySelectorAll(sel),fn)};
@@ -571,7 +571,7 @@ document.addEventListener("mouseover",function(e){if(!TIPOK.matches)return;var e
  if(h)tipShow(h,e.clientX,e.clientY)});
 document.addEventListener("mousemove",function(e){tipMove(e.clientX,e.clientY)});
 document.addEventListener("mouseleave",tipHide);
-function runeMax(r,ilv){var m=1;r.q.forEach(function(x,i){if(ilv>=x)m=i+1});return m}
+function runeMax(r,ilv){var m=1;r.q.forEach(function(x,i){if(ilv>=x)m=i+1});return Math.min(m,10)}
 function resetSlotColors(s){(rn[s]||[]).forEach(function(x){x.c=0})}
 function rnList(s,it){var a=rn[s]=rn[s]||[];while(a.length<it.sh)a.push({c:0,r:null});a.length=it.sh;return a}
 function subOk(sub,a){var p=sub.p;if(!p.length)return true;if(a.length<p.length)return false;for(var i=0;i<p.length;i++){if(a[i].c!==0&&a[i].c!==p[i])return false}return true}
