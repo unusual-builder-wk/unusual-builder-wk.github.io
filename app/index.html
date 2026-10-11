@@ -20,7 +20,7 @@ input,select,textarea{width:100%;margin-bottom:8px}
 button{cursor:pointer;font-weight:700}
 button.pri{background:#2c86a8;border-color:#5cc3e6}
 button.del{color:var(--bad)}
-.rolebar{display:flex;align-items:center;gap:8px;margin:0 0 8px}.rolebtn{display:flex;align-items:center;gap:6px;padding:5px 12px 5px 8px;font-weight:700;font-size:13px;margin:0}.rolebtn.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:#17384a}.rolebtn svg{display:block}
+.rolebar.shake{animation:shk .35s}@keyframes shk{20%{transform:translateX(-6px)}50%{transform:translateX(6px)}80%{transform:translateX(-3px)}}.rolebar{display:flex;align-items:center;gap:8px;margin:0 0 8px}.rolebtn{display:flex;align-items:center;gap:6px;padding:5px 12px 5px 8px;font-weight:700;font-size:13px;margin:0}.rolebtn.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:#17384a}.rolebtn svg{display:block}
 .svc{display:block;padding:10px;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;margin-bottom:10px;background:#0b2230}.svh{display:flex;align-items:center;gap:10px;min-width:0;cursor:pointer}.svh b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rolepill{display:inline-flex;align-items:center;gap:4px;flex:none;font-size:12px;font-weight:800;padding:3px 8px 3px 5px;border-radius:999px;border:1px solid var(--line)}
 .svrow{display:flex;flex-wrap:nowrap;gap:3px;margin-top:8px}.svrow .svi{flex:1 1 0;min-width:0;max-width:34px;aspect-ratio:1;border-radius:4px;border:2px solid #888;background:#0b2230 center/cover no-repeat;padding:0;margin:0;cursor:pointer}.svbtns{display:grid;gap:6px;margin-top:10px}.svbtns button{padding:10px;margin:0}
 
@@ -71,7 +71,7 @@ nav button.on,.bar button.on{background:var(--gold);color:#1a1405;border-color:v
 .xr{flex:none;width:30px;height:30px;padding:0;margin:0;border-radius:50%;background:#e03131;border:2px solid #fff;color:#fff;font-size:13px;font-weight:800;line-height:1}
 #en-palw{display:none!important}
 @media (max-width:700px){.ec2{grid-template-columns:minmax(0,1fr) 140px}.ec2 .es{width:36px;height:36px}.ec2 .ecb button{min-width:34px}}
-.rmbtn{background:#d63a3a;border:1px solid #ff7b7b;color:#fff;font-weight:700;padding:4px 12px;border-radius:6px;margin-left:12px}.sx{position:absolute;left:-7px;top:-7px;width:20px;height:20px;border-radius:50%;background:#e03131;border:2px solid #fff;color:#fff;font-size:11px;font-weight:800;line-height:16px;text-align:center;z-index:3;cursor:pointer;padding:0}
+.rmbtn{background:#d63a3a;border:1px solid #ff7b7b;color:#fff;font-weight:700;padding:4px 12px;border-radius:6px;margin-left:12px}.sx{position:absolute;right:-7px;bottom:-7px;width:20px;height:20px;border-radius:50%;background:#e03131;border:2px solid #fff;color:#fff;font-size:11px;font-weight:800;line-height:16px;text-align:center;z-index:3;cursor:pointer;padding:0}
 .sl{width:56px;height:56px;padding:0;background:var(--inner);border:2px solid #2d5568;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;position:relative}
 .sl .a{font-size:15px;font-weight:800}
 .sl .e{font-size:13px;color:#47697a}
@@ -268,7 +268,7 @@ main>#v-build,main>#v-build.hide{max-height:calc(100vh - 80px)}}
 </div>
 <div class="win"><div class="hd"><span>Character</span></div><div class="bd" id="sheet"></div></div>
 <div class="win"><div class="hd"><span>Build code</span></div><div class="bd"><textarea id="code" rows="3" placeholder="Press Share link to copy a link to this build. Paste a link or code here and press Load to open it."></textarea><div class="bar"><button id="clink" class="pri">Share link</button><button id="cgen">Code</button><button id="cload">Load</button></div><div class="bar" id="imgbar" style="margin-top:8px;display:none"><button id="cscan">Scan QR</button></div></div></div>
-<div class="rolebar"><span class="mu">Build type</span><button type="button" class="rolebtn" id="rl-dpt" data-role="dpt"></button><button type="button" class="rolebtn" id="rl-supp" data-role="supp"></button></div><div class="bar"><button class="pri" id="save">Save build</button><button id="clear">Reset build</button></div>
+<div class="bar"><button id="clear">Reset build</button></div>
 </section>
 
 <section id="v-items" class="hide">
@@ -330,7 +330,7 @@ main>#v-build,main>#v-build.hide{max-height:calc(100vh - 80px)}}
 <div class="win"><div class="hd"><span>Characteristics</span></div><div class="bd"><div id="p-ch" class="apt"></div></div></div>
 </section>
 <section id="v-saved" class="hide">
-<div class="win"><div class="hd"><span>Saved builds</span></div><div class="bd" id="savedlist"></div></div>
+<div class="win"><div class="hd"><span>Save current build</span></div><div class="bd"><input id="svname" placeholder="Build name" style="width:100%;margin:0 0 8px"><div class="rolebar"><span class="mu">Build type *</span><button type="button" class="rolebtn" id="rl-dpt" data-role="dpt"></button><button type="button" class="rolebtn" id="rl-supp" data-role="supp"></button></div><div class="bar"><button class="pri" id="save">Save build</button></div></div></div><div class="win"><div class="hd"><span>Saved builds</span></div><div class="bd" id="savedlist"></div></div>
 
 </section>
 <section id="v-presets" class="hide">
@@ -1257,7 +1257,7 @@ function roleIcon(r,sz){var c=ROLEC[r];if(!c)return"";var id="rg"+r+sz;
  if(r==="dpt")return g+'<path d="M4 20 L16 8 M14 4h6v6" stroke="url(#'+id+')" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M4 20l3-1-2-2z" fill="url(#'+id+')"/></svg>';
  return g+'<path d="M12 2.5 L20 5.5 V12 C20 17 16.5 20.5 12 22 C7.5 20.5 4 17 4 12 V5.5 Z" fill="url(#'+id+')"/><path d="M12 8v7M8.5 11.5h7" stroke="#0b2230" stroke-width="2.4" stroke-linecap="round"/></svg>'}
 function rolePill(r){if(!ROLEC[r])return"";return '<span class="rolepill" style="color:'+ROLEC[r][0]+'">'+roleIcon(r,16)+(r==="dpt"?"DPT":"SUPP")+'</span>'}
-function roleSync(){["dpt","supp"].forEach(function(r){var b=$("rl-"+r);if(!b)return;b.innerHTML=roleIcon(r,20)+'<span style="color:'+ROLEC[r][0]+'">'+(r==="dpt"?"DPT":"SUPP")+'</span>';b.classList.toggle("on",BROLE===r);b.onclick=function(){BROLE=BROLE===r?"":r;roleSync()}})}
+function roleSync(){var sn=$("svname");if(sn&&!sn.value&&document.activeElement!==sn)sn.value=$("bname").value;["dpt","supp"].forEach(function(r){var b=$("rl-"+r);if(!b)return;b.innerHTML=roleIcon(r,20)+'<span style="color:'+ROLEC[r][0]+'">'+(r==="dpt"?"DPT":"SUPP")+'</span>';b.classList.toggle("on",BROLE===r);b.onclick=function(){BROLE=BROLE===r?"":r;roleSync()}})}
 function renderSaved(){
  var L=$("savedlist");
  L.innerHTML=builds.length?builds.map(function(b){var s=savedObj(b),ids=[];
@@ -1287,12 +1287,13 @@ function openSavedItem(id,slot){
 function openSavedPopup(id){
  var f=byId(builds,id);if(!f)return;var old=document.getElementById("svpop");if(old)old.remove();
  var o=document.createElement("div");o.id="svpop";o.style.cssText="position:fixed;inset:0;z-index:9999;background:#000b;display:flex;align-items:center;justify-content:center;padding:12px";
- o.innerHTML='<div style="width:100%;max-width:480px;max-height:96vh;overflow:auto;background:var(--win);border:1px solid var(--gold);border-radius:14px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="color:var(--cy)">'+esc(f.name)+'</b><button id="svx" style="padding:4px 10px">&times;</button></div><div id="svprev" style="text-align:center;min-height:80px;margin-bottom:10px"><span class="mu">Creating preview…</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="svload" class="pri" style="padding:12px">Load</button><button id="svshare" style="padding:12px">Share</button><button id="svsave" style="padding:12px" disabled>Save image</button><button id="svpub" style="padding:12px;grid-column:1/-1">Publish as preset</button><button id="svdel" class="del" style="padding:12px;grid-column:1/-1">Delete</button></div></div>';
+ o.innerHTML='<div style="width:100%;max-width:480px;max-height:96vh;overflow:auto;background:var(--win);border:1px solid var(--gold);border-radius:14px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="color:var(--cy)">'+esc(f.name)+'</b><button id="svx" style="padding:4px 10px">&times;</button></div><div id="svprev" style="text-align:center;min-height:80px;margin-bottom:10px"><span class="mu">Creating preview…</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="svload" class="pri" style="padding:12px">Load</button><button id="svshare" style="padding:12px">Share</button><button id="svsave" style="padding:12px" disabled>Save image</button><button id="svren" style="padding:12px">Rename</button><button id="svpub" style="padding:12px;grid-column:1/-1">Publish as preset</button><button id="svdel" class="del" style="padding:12px;grid-column:1/-1">Delete</button></div></div>';
  document.body.appendChild(o);
  function close(){o.remove()}
  o.onclick=function(e){if(e.target===o)close()};$("svx").onclick=close;
  var so=savedObj(f),link=null,blob=null,sure=false;
  $("svpub").onclick=function(){close();openPublish(id)};
+ $("svren").onclick=function(){var h=$("svren").parentNode.parentNode.querySelector("b");var inp=document.createElement("input");inp.value=f.name;inp.style.cssText="flex:1;margin:0 8px 0 0;min-width:0";h.replaceWith(inp);inp.focus();inp.select();var ok=this;ok.textContent="Confirm";ok.classList.add("pri");ok.onclick=function(){var v=inp.value.trim();if(!v){toast2("Enter a name");return}f.name=v;persist();renderSaved();close();toast2("Build renamed")}};
  $("svload").onclick=function(){applyBuild(so);BROLE=f.role||"";showTab("build");close();toast2("Build loaded")};
  $("svdel").onclick=function(){if(!sure){sure=true;this.textContent="Tap again to delete";return}builds=builds.filter(function(x){return x.id!==id});persist();close();renderSaved()};
  $("svshare").onclick=function(){if(link){close();shareSheet(link,f.name)}else toast2("Preparing the link…")};
@@ -1390,7 +1391,8 @@ $("bcls").innerHTML='<option value="">Class</option>'+CLASSES.map(function(c){re
 $("spcls").innerHTML='<option value="">Common (all classes)</option>'+CLASSES.map(function(c){return '<option>'+c+'</option>'}).join("");
 $("spadd").onclick=function(){var n=$("spname").value.trim();if(!n){$("spname").focus();return}
  spells.push({id:uid(),name:n,kind:$("spkind").value,el:$("spel").value,cls:$("spcls").value});$("spname").value="";persist();renderAll()};
-$("save").onclick=function(){builds.push({id:uid(),name:$("bname").value.trim()||"New Build",lv:lv(),cls:$("bcls").value,role:BROLE,slots:JSON.parse(JSON.stringify(cur)),rn:JSON.parse(JSON.stringify(rn)),sb:JSON.parse(JSON.stringify(sb)),act:act.slice(),pas:pas.slice(),nl:JSON.parse(JSON.stringify(nl)),mech:mech,apt:JSON.parse(JSON.stringify(apt)),el:elOrder.slice(),xe:JSON.parse(JSON.stringify(xe))});persist();showTab("saved")};
+$("bname").addEventListener("input",function(){var s=$("svname");if(s)s.value=this.value});
+$("save").onclick=function(){if(!BROLE){var rb=$("rl-dpt").parentNode;rb.classList.remove("shake");void rb.offsetWidth;rb.classList.add("shake");toast2("Choose the build type: DPT or SUPP");return}var nm0=($("svname").value||"").trim();if(nm0)$("bname").value=nm0;builds.push({id:uid(),name:$("bname").value.trim()||"New Build",lv:lv(),cls:$("bcls").value,role:BROLE,slots:JSON.parse(JSON.stringify(cur)),rn:JSON.parse(JSON.stringify(rn)),sb:JSON.parse(JSON.stringify(sb)),act:act.slice(),pas:pas.slice(),nl:JSON.parse(JSON.stringify(nl)),mech:mech,apt:JSON.parse(JSON.stringify(apt)),el:elOrder.slice(),xe:JSON.parse(JSON.stringify(xe))});persist();BROLE="";$("svname").value="";roleSync();toast2("Build saved");showTab("saved");renderSaved()};
 function askConfirm(msg,yes){var bk=document.createElement("div");bk.id="ddbk";bk.style.zIndex=129;var d=document.createElement("div");d.id="cfm";
  d.innerHTML='<p>'+msg+'</p><div class="b"><button class="n">Cancel</button><button class="y">Yes, reset all</button></div>';
  function close(){bk.remove();d.remove()}bk.onclick=close;d.querySelector(".n").onclick=close;d.querySelector(".y").onclick=function(){close();yes()};
