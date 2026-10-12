@@ -595,7 +595,7 @@ var SATTR=[["Damage inflicted",/damage (inflicted|dealt)/i],["Heals performed",/
 function subKind(z){return z.e?"epic":z.r?"relic":"normal"}
 function subTarget(){if(!SUBT)return null;var it=getItem(cur[SUBT.slot]);return it?{slot:SUBT.slot,it:it,x:SUBT.x}:null}
 function setMode(m){IS.mode="items";renderItems()}
-function goSub(slot,x){MODAL=false;renderSel();SUBT={slot:slot,x:x};SUBF.q="";SUBF.attr="";SUBF.rar="";SUBF.fit=true;showTab("ench");renderSub();setTimeout(function(){var u=$("sub-ui");if(u&&window.innerWidth<1100)u.scrollIntoView({behavior:"smooth",block:"start"})},60)}
+function goSub(slot,x){MODAL=false;renderSel();SUBT={slot:slot,x:x};SUBF.q="";SUBF.attr="";SUBF.rar="";SUBF.fit=true;showTab("ench");renderSub();setTimeout(function(){var u=$("sub-ui");if(u&&(window.innerWidth<1100||u.getBoundingClientRect().top<0))u.scrollIntoView({behavior:"smooth",block:"start"})},60)}
 function subInit(){if(SUBF.init)return;SUBF.init=1;
  $("sx-type").innerHTML='<option value="">All types</option><option value="normal">Sublimation Scroll</option><option value="epic">Epic</option><option value="relic">Relic</option>';
  $("sx-rar").innerHTML='<option value="">All rarities</option>'+[2,3,4,7,5].map(function(i){return '<option value="'+i+'">'+RARN[i]+'</option>'}).join("");
