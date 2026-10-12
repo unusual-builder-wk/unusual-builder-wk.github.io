@@ -516,13 +516,13 @@ function statGroups(stats,hl,slot,chg){var out=[],used={};
   Object.keys(by).forEach(function(v){var ix=by[v];if(ix.length<2)return;
    var els=ix.map(function(i){return stats[i].id.slice(1)}),all=els.length===4;
    ix.forEach(function(i){used[i]=1});
-   out.push({at:ix[0],hl:ix.some(function(i){return hl&&hl(stats[i].id)}),
+   out.push({at:ix[0],neg:+v<0,hl:ix.some(function(i){return hl&&hl(stats[i].id)}),
     h:all?(ICON[g[2]]||"")+esc(g[3])+" "+(+v>0?"+":"")+v:(ICON[g[2]]||"")+g[1]+" "+(+v>0?"+":"")+v+' <span style="white-space:nowrap">'+ELN.filter(function(e){return els.indexOf(e)>=0}).map(function(e){return ICON["m"+e]||e}).join("")+"</span>"})})});
  stats.forEach(function(x,i){if(used[i])return;var nm=esc(sname(x.id));
   if(slot&&/^e[mr][123]$/.test(x.id)){nm=esc(sname(x.id).replace(/\s*[123]\s+\S+\s*$/,""))+' <span style="white-space:nowrap">'+xeList(slot,x.id).map(function(e){return ICON["m"+e]||e}).join("")+'</span>'}
-  out.push({at:i,hl:hl&&hl(x.id),h:(ICON[x.id]||"")+nm+" "+(x.v>0?"+":"")+x.v+(slot&&chg&&/^e[mr][123]$/.test(x.id)?' <button class="xchg" data-xechg="'+slot+'" title="Change elements">'+ELN.map(function(e){return '<span style="background:'+ELC[e]+'">'+(ICON["m"+e]||"")+'</span>'}).join("")+'<b>Change</b></button>':"")})});
+  out.push({at:i,neg:x.v<0,hl:hl&&hl(x.id),h:(ICON[x.id]||"")+nm+" "+(x.v>0?"+":"")+x.v+(slot&&chg&&/^e[mr][123]$/.test(x.id)?' <button class="xchg" data-xechg="'+slot+'" title="Change elements">'+ELN.map(function(e){return '<span style="background:'+ELC[e]+'">'+(ICON["m"+e]||"")+'</span>'}).join("")+'<b>Change</b></button>':"")})});
  out.sort(function(a,b){return a.at-b.at});return out}
-function statsHtml(stats,hl,slot,chg){return statGroups(stats,hl,slot,chg).map(function(g){var t='<span style="white-space:nowrap">'+nb(g.h)+"</span>";return g.hl?'<b style="color:#9be35a">'+t+"</b>":t}).join(", ")}
+function statsHtml(stats,hl,slot,chg){return statGroups(stats,hl,slot,chg).map(function(g){var t='<span style="white-space:nowrap">'+nb(g.h)+"</span>";return g.hl?'<b style="color:'+(g.neg?"#ff5a5a":"#9be35a")+'">'+t+"</b>":t}).join(", ")}
 function tipStats(it){var m={};it.stats.forEach(function(x){m[x.id]=(m[x.id]||0)+x.v});return m}
 function tipRow(id,v,cmps){var h='<div class="tr"><span>'+(ICON[id]||"")+esc(sname(id))+'</span><b>'+(v>0?"+":"")+v+'</b>';
  cmps.forEach(function(c){var d=v-(c?(c[id]||0):0);h+='<span class="td" style="color:'+(!c?"#7f9aa6":d>0?"#6fd96f":d<0?"#ff6b6b":"#7f9aa6")+'">'+(!c?"":d>0?"▲ +"+d:d<0?"▼ "+d:"=")+'</span>'});return h+'</div>'}
