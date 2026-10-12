@@ -827,7 +827,7 @@ function renderSumSpells(){var box=$("sumsp");if(!box)return;box.innerHTML="";
  var md=$("smodal"),bx=$("msp");md.classList.toggle("hide",!SELS);
  if(SELS){var arr=SELS.k==="act"?act:pas,id=arr[SELS.i],sp=id?byId(allSpells(),id):null,ic=id?ICO[id]:null;
   bx.innerHTML='<div class="item" style="gap:10px;justify-content:flex-start">'+(ic?'<img src="'+ic+'" style="width:44px;height:44px;border-radius:6px">':"")+'<div style="min-width:0"><b>'+esc(sp?sp.name:"Empty slot")+'</b><div class="st">'+(SELS.k==="act"?"Active spell":"Passive")+' slot '+(SELS.i+1)+'</div></div></div><div class="bar"><button id="ss-ch">Go to the spells</button>'+(sp?'<button id="ss-rm">Remove</button>':"")+'</div>';
-  $("ss-ch").onclick=function(){SELS=null;SP2=null;P=null;showTab("spells");renderAll();setTimeout(function(){var l=$("splib");if(l)l.scrollIntoView({behavior:"smooth",block:"start"})},120)};
+  $("ss-ch").onclick=function(){LIBT=SELS.k==="pas"?"pa":"sp";SELS=null;SP2=null;P=null;showTab("spells");renderAll();setTimeout(function(){var l=$("splib");if(l)l.scrollIntoView({behavior:"smooth",block:"start"})},120)};
   var rm=$("ss-rm");if(rm)rm.onclick=function(){arr[SELS.i]=null;SELS=null;renderAll()}}
  else bx.innerHTML=""}
 function gemC(c,sz){return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" style="vertical-align:-'+Math.round(sz*0.22)+'px;flex:none"><polygon points="12,2 21,8 21,16 12,22 3,16 3,8" fill="'+c+'" stroke="#0b1a22" stroke-width="1.3" stroke-linejoin="round"/><polygon points="12,2 21,8 12,12 3,8" fill="#fff" opacity=".38"/><polygon points="12,12 21,8 21,16 12,22" fill="#000" opacity=".24"/></svg>'}
@@ -933,7 +933,7 @@ function pruneSpells(){dedupe(act);dedupe(pas);var L=lv();if(!L)return;var cs=al
  for(var j=0;j<PAS_LV.length;j++){var id2=pas[j];if(!id2)continue;var sp2=byId(cs,id2);if(L<PAS_LV[j]||(sp2&&(sp2.lv||1)>L))pas[j]=null}}
 var SP2=null;
 function spTab(arr,i,need,kind){var b=spBtn(arr,i,need,kind);var locked=lv()&&lv()<need;b._open=b.onclick;
- b.onclick=function(){if(locked)return;var now=Date.now();if(arr[i]&&SPDC.k===kind+i&&now-SPDC.t<450){SPDC={k:"",t:0};arr[i]=null;SP2=null;SPVIEW=null;P=null;renderAll();return}SPDC={k:kind+i,t:now};if(SPSEL){var s0=byId(allSpells(),SPSEL);if(s0&&s0.kind===kind){placeSpell(SPSEL,i);return}}if(!arr[i]){SP2=null;P=null;renderAll();if(!DESK.matches)setTimeout(function(){var l=$("splib");if(l)l.scrollIntoView({behavior:"smooth",block:"start"})},60);return}SPVIEW=arr[i];SP2=(SP2&&SP2.k===kind&&SP2.i===i)?null:{k:kind,i:i};P=null;renderAll()};
+ b.onclick=function(){if(locked)return;var now=Date.now();if(arr[i]&&SPDC.k===kind+i&&now-SPDC.t<450){SPDC={k:"",t:0};arr[i]=null;SP2=null;SPVIEW=null;P=null;renderAll();return}SPDC={k:kind+i,t:now};if(SPSEL){var s0=byId(allSpells(),SPSEL);if(s0&&s0.kind===kind){placeSpell(SPSEL,i);return}}if(!arr[i]){LIBT=kind==="pas"?"pa":"sp";SP2=null;P=null;renderAll();if(!DESK.matches)setTimeout(function(){var l=$("splib");if(l)l.scrollIntoView({behavior:"smooth",block:"start"})},60);return}SPVIEW=arr[i];SP2=(SP2&&SP2.k===kind&&SP2.i===i)?null:{k:kind,i:i};P=null;renderAll()};
  if(SP2&&SP2.k===kind&&SP2.i===i)b.style.boxShadow="0 0 0 2px #d9b25c";return b}
 /* ---- spell library + drag & drop ---- */
 var LIBT="sp",SPSEL=null,SPVIEW=null,SPDC={k:"",t:0};
