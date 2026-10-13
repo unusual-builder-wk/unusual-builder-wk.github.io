@@ -232,12 +232,12 @@ main>#v-build,main>#v-build.hide{max-height:calc(100vh - 80px)}}
 #tip .tr{display:flex;align-items:center;gap:8px;padding:1px 0}#tip .tr>span:first-child{flex:1;min-width:0}#tip .td{min-width:62px;text-align:right;font-weight:700;font-size:12px}
 #sppanel .tr{display:flex;align-items:center;gap:8px;padding:1px 0}#sppanel .tr>span:first-child{flex:1;min-width:0}#sppanel .td{min-width:62px;text-align:right;font-weight:700;font-size:12px}
 @media (hover:none),(max-width:1099px){#tip{display:none!important}}
-.libg{display:grid;grid-template-columns:repeat(auto-fill,52px);gap:6px}.libg .sl.sp{width:52px;height:52px;aspect-ratio:auto}
+.libg{display:grid;grid-template-columns:repeat(auto-fill,52px);gap:6px}.libg.libp{grid-template-columns:repeat(5,52px)}.libg .sl.sp{width:52px;height:52px;aspect-ratio:auto}
 #splib .bar button.on{background:var(--gold);color:#10141a}
 @media (min-width:1100px){.g6{grid-template-columns:repeat(6,58px)}#act.g6{grid-template-columns:repeat(6,58px)}.g3{grid-template-columns:repeat(3,58px)}.sl.sp{width:58px;height:58px;aspect-ratio:auto}}
 @media (min-width:1100px){#v-spells>.win>.bd{display:grid;grid-template-columns:minmax(370px,400px) minmax(0,1fr);column-gap:22px;align-items:start}
 #v-spells>.win>.bd>*{grid-column:1}#v-spells>.win>.bd>#splib{grid-column:2;grid-row:1/span 40;border-left:1px solid var(--line);padding-left:18px;min-height:420px}
-#splib .libg{grid-template-columns:repeat(auto-fill,56px)}#splib .libg .sl.sp{width:56px;height:56px}}
+#splib .libg{grid-template-columns:repeat(auto-fill,56px)}#splib .libg.libp{grid-template-columns:repeat(5,56px)}#splib .libg .sl.sp{width:56px;height:56px}}
 @media (min-width:1100px){body[data-tab="spells"] #sumsp,body[data-tab="spells"] #sumsp-t{display:none}}
 </style>
 </head>
@@ -989,7 +989,7 @@ function renderSpLib(){var box=$("splib");if(!box)return;var c=$("bcls").value;b
  groups.forEach(function(g){if(g[2]==="__h"){var hh=document.createElement("div");hh.style.cssText="margin:14px 0 2px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7f9aa6;border-bottom:1px solid var(--line);padding-bottom:3px";hh.textContent=g[0];body.appendChild(hh);return}
   if(!g[0]){var gr0=document.createElement("div");gr0.className="libg";gr0.style.marginTop="6px";g[1].forEach(function(sp){gr0.appendChild(libTile(sp))});body.appendChild(gr0);return}
   var h=document.createElement("div");h.className="mu";h.style.cssText="margin:8px 0 4px;display:flex;align-items:center;gap:4px;color:"+(g[2]?col(EL,g[2]):"#d9b25c");h.innerHTML=(g[2]&&ICON["m"+g[0]]?ICON["m"+g[0]]:"")+esc(g[0])+' <span style="font-size:11px">('+g[1].length+')</span>';body.appendChild(h);
-  var gr=document.createElement("div");gr.className="libg";g[1].forEach(function(sp){gr.appendChild(libTile(sp))});body.appendChild(gr)});
+  var gr=document.createElement("div");gr.className="libg"+(g[0]==="Passives"?" libp":"");g[1].forEach(function(sp){gr.appendChild(libTile(sp))});body.appendChild(gr)});
  if(!groups.some(function(g){return g[1]&&g[1].length}))body.innerHTML='<div class="mu">No spells here.</div>';
  var sel=SPSEL?byId(allSpells(),SPSEL):null;
  $("lib-hint").textContent=sel?"Selected: "+sel.name+". Tap a slot in your deck to place it.":"Double-click a spell to add it to your deck, or drag it onto a slot. Double-click a spell in your deck to remove it. Drag a slot onto another to swap.";
