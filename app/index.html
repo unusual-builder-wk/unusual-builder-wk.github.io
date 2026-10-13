@@ -2926,7 +2926,7 @@ function shareSheet(u,nm,bo){
  var h='<div style="width:100%;max-width:480px;max-height:94vh;overflow:auto;background:var(--win);border:1px solid var(--gold);border-radius:14px 14px 0 0;padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px))"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b style="color:var(--cy)">Share this build</b><button id="shx" style="padding:4px 10px">&times;</button></div>';
  if(bo)h+='<div id="shprev" style="text-align:center;margin-bottom:10px;min-height:60px"><span class="mu">Creating preview…</span></div><div id="shimg" style="margin-bottom:8px"><button id="shsave" style="padding:10px;width:100%" disabled>Save image</button></div>';
  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
- rows.forEach(function(r,k){h+='<button data-k="'+k+'" style="border-color:'+r[1]+';padding:12px"><span style="color:'+r[1]+'">&#9679;</span> '+r[0]+(r[0]==="Discord"&&bo?' (image + link)':' (link)')+'</button>'});
+ rows.forEach(function(r,k){h+='<button data-k="'+k+'" style="border-color:'+r[1]+';padding:12px"><span style="color:'+r[1]+'">&#9679;</span> '+r[0]+' (link)'+'</button>'});
  h+='<button id="shcp" style="padding:12px">Copy link</button>';
  if(navigator.share)h+='<button id="shmore" style="padding:12px">More apps…</button>';
  h+='</div><div class="mu" style="font-size:12px;margin-top:10px;word-break:break-all;max-height:3.6em;overflow:hidden">'+esc(u)+'</div></div>';
@@ -2955,7 +2955,6 @@ function shareSheet(u,nm,bo){
    navigator.clipboard.write([new ClipboardItem(item)]).then(done,function(){navigator.clipboard.write([new ClipboardItem({"image/png":curBlob})]).then(function(){copyText(u);done()},function(){fallbackSave(toDiscord,"")})});return}
   fallbackSave(toDiscord,"")}
  Array.prototype.forEach.call(o.querySelectorAll("button[data-k]"),function(b){b.onclick=function(){var r=rows[+b.getAttribute("data-k")];
-  if(r[0]==="Discord"&&bo){imgLink(true);return}
   copyText(u);
   var url=r[2]==="copy:"?"discord://-/channels/@me":r[2];
   if(r[0]==="Discord")toast2("Link copied — paste it in Discord");
