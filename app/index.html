@@ -2924,7 +2924,7 @@ function shareSheet(u,nm,bo){
  o.style.cssText="position:fixed;inset:0;z-index:9999;background:#000a;display:flex;align-items:flex-end;justify-content:center";
  var rows=[["WhatsApp","#25d366","https://wa.me/?text="+enc(msg+" "+u)],["Telegram","#2aabee","https://t.me/share/url?url="+enc(u)+"&text="+enc(msg)],["Discord","#5865f2","copy:"]];
  var h='<div style="width:100%;max-width:480px;max-height:94vh;overflow:auto;background:var(--win);border:1px solid var(--gold);border-radius:14px 14px 0 0;padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px))"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b style="color:var(--cy)">Share this build</b><button id="shx" style="padding:4px 10px">&times;</button></div>';
- if(bo)h+='<div id="shprev" style="text-align:center;margin-bottom:10px;min-height:60px"><span class="mu">Creating preview…</span></div><div id="shimg" style="margin-bottom:8px;display:grid;gap:8px"><button id="shboth" class="pri" style="padding:12px;width:100%" disabled>Share image + link</button><button id="shsave" style="padding:10px;width:100%" disabled>Save image</button></div>';
+ if(bo)h+='<div id="shprev" style="text-align:center;margin-bottom:10px;min-height:60px"><span class="mu">Creating preview…</span></div><div id="shimg" style="margin-bottom:8px"><button id="shsave" style="padding:10px;width:100%" disabled>Save image</button></div>';
  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
  rows.forEach(function(r,k){h+='<button data-k="'+k+'" style="border-color:'+r[1]+';padding:12px"><span style="color:'+r[1]+'">&#9679;</span> '+r[0]+(r[0]==="Discord"&&bo?' (image + link)':' (link)')+'</button>'});
  h+='<button id="shcp" style="padding:12px">Copy link</button>';
@@ -2943,18 +2943,19 @@ function shareSheet(u,nm,bo){
   try{a.click()}catch(e){}
   setTimeout(function(){a.remove();if(!left)toast2(name+" did not open — is it installed? The link is copied, paste it where you like.")},1800);
  }
- var curCv=null,fname0=((nm||"build").replace(/[^A-Za-z0-9 _-]/g,"").trim()||"build")+".png";
- function imgLink(toDiscord){canvasPng(curCv).then(function(blob){
-  var file=null;try{file=new File([blob],fname0,{type:"image/png"})}catch(e){}
-  if(file&&navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
-   return navigator.share({files:[file],title:msg,text:msg+"\n"+u}).then(close,function(){})}
-  var done=function(){toast2(toDiscord?"Image + link copied — paste in Discord (Ctrl+V)":"Image + link copied — paste it where you want");close();if(toDiscord)tryOpen("discord://-/channels/@me","Discord")};
+ var curCv=null,curBlob=null,curFile=null,fname0=((nm||"build").replace(/[^A-Za-z0-9 _-]/g,"").trim()||"build")+".png";
+ function fallbackSave(toDiscord,why){copyText(u);if(curBlob)saveImageBlob(curBlob,fname0);toast2((why?why+" — ":"")+"Link copied and image saved: post both"+(toDiscord?" in Discord":""));close();if(toDiscord)tryOpen("discord://-/channels/@me","Discord")}
+ function imgLink(toDiscord){
+  if(!curBlob){toast2("Preview is still loading, try again in a second");return}
+  if(curFile&&navigator.canShare&&navigator.share){var ok=false;try{ok=navigator.canShare({files:[curFile]})}catch(e){}
+   if(ok){navigator.share({files:[curFile],title:msg,text:msg+"\n"+u}).then(close,function(err){if(err&&err.name==="AbortError")return;fallbackSave(toDiscord,"Share not available")});return}}
+  var done=function(){toast2(toDiscord?"Image + link copied — paste in Discord":"Image + link copied — paste it where you want");close();if(toDiscord)tryOpen("discord://-/channels/@me","Discord")};
   if(navigator.clipboard&&window.ClipboardItem){
-   var item={"image/png":blob};try{item["text/plain"]=new Blob([msg+"\n"+u],{type:"text/plain"})}catch(e){}
-   return navigator.clipboard.write([new ClipboardItem(item)]).then(done,function(){return navigator.clipboard.write([new ClipboardItem({"image/png":blob})]).then(function(){copyText(u);done()},function(){copyText(u);saveImageBlob(blob,fname0);toast2("Link copied and image saved — post both");close()})})}
-  copyText(u);saveImageBlob(blob,fname0);toast2("Link copied and image saved — post both");close()})}
+   var item={"image/png":curBlob};try{item["text/plain"]=new Blob([msg+"\n"+u],{type:"text/plain"})}catch(e){}
+   navigator.clipboard.write([new ClipboardItem(item)]).then(done,function(){navigator.clipboard.write([new ClipboardItem({"image/png":curBlob})]).then(function(){copyText(u);done()},function(){fallbackSave(toDiscord,"")})});return}
+  fallbackSave(toDiscord,"")}
  Array.prototype.forEach.call(o.querySelectorAll("button[data-k]"),function(b){b.onclick=function(){var r=rows[+b.getAttribute("data-k")];
-  if(r[0]==="Discord"&&curCv){imgLink(true);return}
+  if(r[0]==="Discord"&&bo){imgLink(true);return}
   copyText(u);
   var url=r[2]==="copy:"?"discord://-/channels/@me":r[2];
   if(r[0]==="Discord")toast2("Link copied — paste it in Discord");
@@ -2963,7 +2964,7 @@ function shareSheet(u,nm,bo){
   var fname=((nm||"build").replace(/[^A-Za-z0-9 _-]/g,"").trim()||"build")+".png";
   try{var snap=cardSnap(bo);drawCard(snap,u).then(function(cv){if(!document.getElementById("shsheet"))return;
    cv.style.maxHeight="42vh";$("shprev").innerHTML="";$("shprev").appendChild(cv);
-   curCv=cv;$("shsave").disabled=false;$("shboth").disabled=false;$("shboth").onclick=function(){imgLink(false)};
+   curCv=cv;$("shsave").disabled=false;canvasPng(cv).then(function(bl){curBlob=bl;try{curFile=new File([bl],fname0,{type:"image/png"})}catch(e){curFile=null}});
    $("shsave").onclick=function(){canvasPng(cv).then(function(b){saveImageBlob(b,fname)})};
   }).catch(function(){var p=$("shprev");if(p)p.innerHTML='<span class="mu">Preview not available.</span>'})}
   catch(e){$("shprev").innerHTML='<span class="mu">Preview not available.</span>'}
