@@ -1465,8 +1465,9 @@ function applyBuild(o){
 function findCode(t){var m=/WKF[12]-[A-Za-z0-9_+\/=-]+/.exec(t||"");return m?m[0]:""}
 function loadFromText(t){var c=findCode(t);if(!c)return Promise.reject(0);return unpackBuild(c).then(function(o){if(!o||typeof o!=="object")throw 0;applyBuild(o)})}
 function copyText(t){
- try{if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).then(function(){return true},function(){return false})}catch(e){}
- try{var a=$("code");a.value=t;a.select();return Promise.resolve(document.execCommand("copy"))}catch(e){return Promise.resolve(false)}
+ function legacy(){try{var a=document.createElement("textarea");a.value=t;a.setAttribute("readonly","");a.style.cssText="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0";document.body.appendChild(a);a.focus();a.select();a.setSelectionRange(0,t.length);var ok=document.execCommand("copy");a.remove();return ok}catch(e){return false}}
+ try{if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).then(function(){return true},function(){return legacy()})}catch(e){}
+ return Promise.resolve(legacy())
 }
 $("cgen").onclick=function(){packBuild(curBuild()).then(function(c){$("code").value=c;$("code").select();copyText(c).then(function(ok){if(ok)toast2("Code copied")})})};
 var QRGEN=(function(){var M={},C={};function req(n){n=n.replace(/^\.\//,"");if(C[n])return C[n].exports;var m={exports:{}};C[n]=m;M[n](m,m.exports,req);return m.exports}
@@ -2929,7 +2930,7 @@ function shareSheet(u,nm,bo){
  rows.forEach(function(r,k){h+='<button data-k="'+k+'" style="border-color:'+r[1]+';padding:12px"><span style="color:'+r[1]+'">&#9679;</span> '+r[0]+' (link)'+'</button>'});
  h+='<button id="shcp" style="padding:12px">Copy link</button>';
  if(navigator.share)h+='<button id="shmore" style="padding:12px">More apps…</button>';
- h+='</div><div class="mu" style="font-size:12px;margin-top:10px;word-break:break-all;max-height:3.6em;overflow:hidden">'+esc(u)+'</div></div>';
+ h+='</div><div class="mu" style="font-size:12px;margin-top:10px;word-break:break-all;max-height:3.6em;overflow:auto;user-select:all">'+esc(u)+'</div></div>';
  o.innerHTML=h;document.body.appendChild(o);
  function close(){o.remove()}
  o.onclick=function(e){if(e.target===o)close()};$("shx").onclick=close;
@@ -2955,10 +2956,12 @@ function shareSheet(u,nm,bo){
    navigator.clipboard.write([new ClipboardItem(item)]).then(done,function(){navigator.clipboard.write([new ClipboardItem({"image/png":curBlob})]).then(function(){copyText(u);done()},function(){fallbackSave(toDiscord,"")})});return}
   fallbackSave(toDiscord,"")}
  Array.prototype.forEach.call(o.querySelectorAll("button[data-k]"),function(b){b.onclick=function(){var r=rows[+b.getAttribute("data-k")];
-  copyText(u);
   var url=r[2]==="copy:"?"discord://-/channels/@me":r[2];
-  if(r[0]==="Discord"){var mob=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent||"");toast2("Link copied — paste it in Discord");if(!mob){close();return}}
-  tryOpen(url,r[0]);close()}});
+  copyText(u).then(function(ok){
+   if(r[0]==="Discord"){var mob=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent||"");
+    toast2(ok?"Link copied ("+u.length+" characters) — paste it in Discord":"Could not copy. Select the link below and copy it.");
+    if(!ok)return;if(!mob){close();return}}
+   tryOpen(url,r[0]);close()})}});
  if(bo){
   var fname=((nm||"build").replace(/[^A-Za-z0-9 _-]/g,"").trim()||"build")+".png";
   try{var snap=cardSnap(bo);drawCard(snap,u).then(function(cv){if(!document.getElementById("shsheet"))return;
@@ -3176,6 +3179,7 @@ function aeApply(){var R=AE.res;if(!R||!R.S.res||!R.S.sk.length){toast("Nothing 
  aeClose();ENSEL=null;renderAll();toast2("Auto-enchant applied")}
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("#en-ae");if(b)aeOpen()});
 $("ae-x").onclick=aeClose;$("aemodal").onclick=function(e){if(e.target===this)aeClose()};
+
 load();drawFlags();deckInit();renderAll();
 setTimeout(function(){icoPre("en")},3500);setTimeout(spdLoad,6000);
 
