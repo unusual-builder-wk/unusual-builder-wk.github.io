@@ -2957,7 +2957,7 @@ function shareSheet(u,nm,bo){
  Array.prototype.forEach.call(o.querySelectorAll("button[data-k]"),function(b){b.onclick=function(){var r=rows[+b.getAttribute("data-k")];
   copyText(u);
   var url=r[2]==="copy:"?"discord://-/channels/@me":r[2];
-  if(r[0]==="Discord")toast2("Link copied — paste it in Discord");
+  if(r[0]==="Discord"){var mob=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent||"");toast2("Link copied — paste it in Discord");if(!mob){close();return}}
   tryOpen(url,r[0]);close()}});
  if(bo){
   var fname=((nm||"build").replace(/[^A-Za-z0-9 _-]/g,"").trim()||"build")+".png";
